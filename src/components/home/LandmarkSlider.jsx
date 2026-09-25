@@ -49,27 +49,30 @@ const landmarks = [
 export default function LandmarkSlider() {
   return (
     <Swiper
-      modules={[Navigation]}
-      navigation={{
-        prevEl: ".landmark-prev",
-        nextEl: ".landmark-next",
-      }}
-      loop={true}
-      spaceBetween={20}
-      slidesPerView={1.2}
-      breakpoints={{
-        640: {
-          slidesPerView: 1.2,
-        },
-        1024: {
-          slidesPerView: 4.3,
-        },
-        1280: {
-          slidesPerView: 4.3,
-        },
-      }}
-      className="w-full"
-    >
+  modules={[Navigation]}
+  navigation={{
+    prevEl: ".landmark-prev",
+    nextEl: ".landmark-next",
+  }}
+  loop={true}
+  spaceBetween={15}
+  slidesPerView={1.15}
+  breakpoints={{
+    640: {
+      slidesPerView: 1.2,
+      spaceBetween: 15,
+    },
+    1024: {
+      slidesPerView: 4.3,
+      spaceBetween: 20,
+    },
+    1280: {
+      slidesPerView: 4.3,
+      spaceBetween: 20,
+    },
+  }}
+  className="w-full"
+>
       {landmarks.map((landmark) => (
         <SwiperSlide key={landmark.id} className="select-none">
           <Link href={landmark.link} className="flex flex-col items-center">
@@ -86,7 +89,7 @@ export default function LandmarkSlider() {
             </div>
 
             {/* TITLE */}
-            <h3 className="mt-2 w-11/12 text-center font-[optima]! text-lg uppercase lg:mt-6 lg:w-10/12 lg:text-2xl lg:text-[24px]">
+            <h3 className="mt-2 w-11/12 text-center font-[optima]! text-lg text-[22px] uppercase lg:mt-6 lg:w-10/12 lg:text-2xl lg:text-[24px]">
               {landmark.name}
             </h3>
           </Link>
