@@ -4,14 +4,12 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 
 // Dropdown/Accordion Component 
-const FooterSection = ({ title, links }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
+const FooterSection = ({ title, links,isOpen, onToggle }) => {
   return (
     <div data-testid="footer-section" className="mb-8 lg:mb-0">
       <button 
         data-testid="footer-section-toggle" 
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={onToggle}
         className="mb-0 flex w-full items-center lg:mb-6 justify-between"
       >
         <div className="flex w-full items-center justify-between pr-2 lg:pr-8">
@@ -58,6 +56,10 @@ const FooterSection = ({ title, links }) => {
 };
 
 export default function Footer() {
+
+  const [openSection, setOpenSection] = useState(null);
+
+
   const footerSectionsData = [
     {
       title: "ABOUT EMAAR",
@@ -338,6 +340,10 @@ export default function Footer() {
                   key={index}
                   title={section.title}
                   links={section.links}
+                  isOpen={openSection === index}
+                  onToggle={() =>
+      setOpenSection(openSection === index ? null : index)
+    }
                 />
               ))}
             </div>
