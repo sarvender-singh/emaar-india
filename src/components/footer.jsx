@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 
 // Dropdown/Accordion Component 
-const FooterSection = ({ title, links,isOpen, onToggle }) => {
+const FooterSection = ({ title, links, isOpen, onToggle }) => {
   return (
     <div data-testid="footer-section" className="mb-8 lg:mb-0">
       <button 
@@ -59,45 +59,59 @@ export default function Footer() {
 
   const [openSection, setOpenSection] = useState(null);
 
-
   const footerSectionsData = [
     {
       title: "ABOUT EMAAR",
       links: [
-        "Lorem ipsum pointer",
-        "Lorem ipsum pointer",
-        "Lorem ipsum pointer"
+        "Who We Are",
+        "Leadership",
+        "Awards",
+        "Emaar Business",
+        "Emaar Foundation",
+        "Career",
+        "Investor Relations",
+        "Emaar Blogs",
+        "Media",
+        "Emaar Sustainability",
+        "E-Services",
+        "Contact Us",
+        "Compliance"
       ]
     },
     {
       title: "PROJECTS",
       links: [
-        "Lorem ipsum pointer",
-        "Lorem ipsum pointer",
-        "Lorem ipsum pointer"
+        "Residential",
+        "Commercial"
       ]
     },
     {
       title: "MASTER DEVELOPMENTS",
       links: [
-        "Lorem ipsum pointer",
-        "Lorem ipsum pointer",
-        "Lorem ipsum pointer"
+        "Gomti Greens",
+        "Savana by Indore Greens",
+        "Savana by Jaipur Greens"
       ]
     },
     {
       title: "LATEST LAUNCHES",
       links: [
-        "Lorem ipsum pointer",
-        "Lorem ipsum pointer",
-        "Lorem ipsum pointer"
+        "Emaar Serenity Hills",
+        "Urban Ascent",
+        "Elite Oasis",
+        "Emaar India Business Centre",
+        "Mohali Hills Residential Plots"
       ]
     },
     {
       title: "EMAAR INTERNATIONAL",
       links: [
-        "Lorem ipsum pointer",
-        "Lorem ipsum pointer"
+        "KSA",
+        "India",
+        "Pakistan",
+        "Egypt",
+        "Morocco",
+        "Turkey"
       ]
     },
     {
@@ -107,6 +121,13 @@ export default function Footer() {
         "Lorem ipsum pointer"
       ]
     }
+  ];
+
+  const legalLinks = [
+    "Privacy Policy",
+    "Disclaimer",
+    "Terms & Conditions",
+    "Country & Language"
   ];
 
   return (
@@ -208,7 +229,7 @@ export default function Footer() {
                 href="#"
                 target="_blank"
                 rel="nofollow noopener noreferrer"
-               className="hover:text-secondary text-[#232323] transition-colors"
+                className="hover:text-secondary text-[#232323] transition-colors"
                 aria-label="facebook"
               >
                 <div className="[&_svg]:size-5">
@@ -250,7 +271,7 @@ export default function Footer() {
                 href="#"
                 target="_blank"
                 rel="nofollow noopener noreferrer"
-              className="hover:text-secondary text-[#232323] transition-colors"
+                className="hover:text-secondary text-[#232323] transition-colors"
                 aria-label="youtube"
               >
                 <div className="[&_svg]:size-5">
@@ -288,7 +309,7 @@ export default function Footer() {
                 href="#"
                 target="_blank"
                 rel="nofollow noopener noreferrer"
-               className="hover:text-secondary text-[#232323] transition-colors"
+                className="hover:text-secondary text-[#232323] transition-colors"
                 aria-label="linkedin"
               >
                 <div className="[&_svg]:size-5">
@@ -304,7 +325,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Dubai Subscribe Form - Added Only */}
+          {/* Subscribe Form */}
           <div className="flex w-full flex-col gap-2 md:w-auto">
             <form
               data-testid="newsletter-form"
@@ -332,7 +353,7 @@ export default function Footer() {
 
         {/* Middle Section (Grid 4 items in a row) */}
         <div className="flex flex-col">
-          <div className="container mx-auto px-0 self-center pt-8 sm:py-12">
+          <div className="container mx-auto px-0 self-center pt-8 sm:pt-12 sm:pb-2">
 
             <div className="grid grid-cols-1 gap-0 lg:grid-cols-4 lg:gap-x-8">
               {footerSectionsData.map((section, index) => (
@@ -342,8 +363,8 @@ export default function Footer() {
                   links={section.links}
                   isOpen={openSection === index}
                   onToggle={() =>
-      setOpenSection(openSection === index ? null : index)
-    }
+                    setOpenSection(openSection === index ? null : index)
+                  }
                 />
               ))}
             </div>
@@ -361,58 +382,19 @@ export default function Footer() {
             data-testid="footer-legal-list"
             className="flex flex-wrap justify-center text-sm text-gray-700"
           >
-            <li>
-              <Link
-                data-testid="footer-link"
-                className="border-e px-4 text-xs tracking-widest text-gray-500 uppercase transition-colors hover:text-gray-900"
-                href="#"
-              >
-                Privacy Policy
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                data-testid="footer-link"
-                className="border-e px-4 text-xs tracking-widest text-gray-500 uppercase transition-colors hover:text-gray-900"
-                href="#"
-              >
-                Emaar Asset Usage Policy
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                data-testid="footer-link"
-                className="border-e px-4 text-xs tracking-widest text-gray-500 uppercase transition-colors hover:text-gray-900"
-                href="#"
-              >
-                Emaar Properties Terms & Conditions
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                data-testid="footer-link"
-                className="border-e px-4 text-xs tracking-widest text-gray-500 uppercase transition-colors hover:text-gray-900"
-                href="#"
-              >
-                Country & Language
-              </Link>
-            </li>
-
-            <li>
-              <a
-                data-testid="footer-phone-link"
-                href="tel:+912235280992"
-                target="_blank"
-                rel="noopener noreferrer"
-                dir="ltr"
-                className="px-4 text-xs tracking-widest text-gray-500 uppercase transition-colors hover:text-gray-900"
-              >
-                +91-2235280992
-              </a>
-            </li>
+            {legalLinks.map((item, idx) => (
+              <li key={idx}>
+                <Link
+                  data-testid="footer-link"
+                  className={`px-4 text-xs tracking-widest text-gray-500 uppercase transition-colors hover:text-gray-900 ${
+                    idx !== legalLinks.length - 1 ? 'border-e' : ''
+                  }`}
+                  href="#"
+                >
+                  {item}
+                </Link>
+              </li>
+            ))}
           </ul>
 
         </div>

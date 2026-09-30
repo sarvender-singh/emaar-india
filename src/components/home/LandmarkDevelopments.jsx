@@ -14,14 +14,14 @@ export default function LandmarkDevelopments() {
     <section className="container flex flex-col gap-4 px-4 2xl:px-24">
       {/* SECTION LABEL + LINE */}
       <div className="flex items-center gap-2 text-xs font-bold tracking-widest text-gray-400 uppercase">
-        LANDMARKS
+       PROJECTS
         <span className="h-px max-w-28 flex-1 bg-gray-400"></span>
       </div>
 
       {/* HEADING + ARROWS */}
       <div className="flex items-center justify-between">
         <h2 className="flex flex-col font-[optima]! text-[34px] leading-10 uppercase lg:text-4xl">
-          Our Landmark Developments
+         OUR LANDMARK DEVELOPMENTS
         </h2>
 
         {/* NAVIGATION */}

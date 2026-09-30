@@ -10,72 +10,75 @@ import "swiper/css";
 const landmarks = [
   {
     id: 1,
-    name: "EMAAR SERENITY HILLS, GURUGRAM",
-    image: "/images/landmarks/serenity-hills.jpg",
-    link: "/projects/emaar-serenity-hills",
+    name: "SERENITY HILLS, GURUGRAM",
+    image: "/images/landmarks/Serenity-hills-big.webp",
+    slug: "emaar-serenity-hills",
   },
   {
     id: 2,
-    name: "URBAN ASCENT, GURUGRAM",
-    image: "/images/landmarks/urban-ascent.jpg",
-    link: "/projects/urban-ascent",
+    name: "EMAAR INDIA BUSINESS CENTRE, GURUGRAM",
+    image: "/images/landmarks/business-centre.jpg",
+    slug: "emaar-india-business-centre",
   },
   {
     id: 3,
     name: "ELITE OASIS, LUCKNOW",
     image: "/images/landmarks/elite-oasis.jpg",
-    link: "/projects/elite-oasis",
+    slug: "elite-oasis",
   },
   {
     id: 4,
-    name: "EMAAR INDIA BUSINESS CENTRE, GURUGRAM",
-    image: "/images/landmarks/business-centre.jpg",
-    link: "/projects/emaar-india-business-centre",
+    name: "URBAN ASCENT, GURUGRAM",
+    image: "/images/landmarks/urban-ascent.jpg",
+    slug: "urban-ascent",
   },
   {
     id: 5,
     name: "MOHALI HILLS RESIDENTIAL PLOTS, MOHALI",
     image: "/images/landmarks/mohali-hills.jpg",
-    link: "/projects/mohali-hills",
+    slug: "mohali-hills",
   },
   {
     id: 6,
-    name: "MOHALI HILLS RESIDENTIAL PLOTS, MOHALI",
-    image: "/images/landmarks/mohali-hills.jpg",
-    link: "/projects/mohali-hills",
+    name: "URBAN OASIS PHASE-4, GURUGRAM",
+    image: "/images/landmarks/property-main-image-706x385.jpg",
+    slug: "urban-oasis-phase-4",
   },
 ];
 
 export default function LandmarkSlider() {
   return (
     <Swiper
-  modules={[Navigation]}
-  navigation={{
-    prevEl: ".landmark-prev",
-    nextEl: ".landmark-next",
-  }}
-  loop={true}
-  spaceBetween={15}
-  slidesPerView={1.15}
-  breakpoints={{
-    640: {
-      slidesPerView: 1.2,
-      spaceBetween: 15,
-    },
-    1024: {
-      slidesPerView: 4.3,
-      spaceBetween: 20,
-    },
-    1280: {
-      slidesPerView: 4.3,
-      spaceBetween: 20,
-    },
-  }}
-  className="w-full"
->
+      modules={[Navigation]}
+      navigation={{
+        prevEl: ".landmark-prev",
+        nextEl: ".landmark-next",
+      }}
+      loop={true}
+      spaceBetween={15}
+      slidesPerView={1.15}
+      breakpoints={{
+        640: {
+          slidesPerView: 1.2,
+          spaceBetween: 15,
+        },
+        1024: {
+          slidesPerView: 4.3,
+          spaceBetween: 20,
+        },
+        1280: {
+          slidesPerView: 4.3,
+          spaceBetween: 20,
+        },
+      }}
+      className="w-full"
+    >
       {landmarks.map((landmark) => (
         <SwiperSlide key={landmark.id} className="select-none">
-          <Link href={landmark.link} className="flex flex-col items-center">
+          <Link
+            href={`/properties/${landmark.slug}`}
+            className="flex flex-col items-center"
+          >
             {/* IMAGE */}
             <div className="group aspect-2/1 w-full overflow-hidden lg:aspect-video">
               <Image

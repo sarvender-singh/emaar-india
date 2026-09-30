@@ -2,13 +2,11 @@
 
 @theme {
   --color-primary: #091B36;
-  
-  /* Yahan apne custom fonts add karein */
+  --color-secondary: #0074a7;
+  --color-trinary: #091B36;   /* reference ka exact hex mile to badal lena */
   --font-sans: "Lato", sans-serif;
   --font-serif: "Optima", serif;
-  --color-secondary: #0074a7;
 }
-
 /* =========================
    LATO
 ========================= */
@@ -97,7 +95,10 @@
 
 * {
   box-sizing: border-box;
-  font-family: "Lato", sans-serif; 
+}
+
+button, input, textarea, select {
+  font-family: inherit;
 }
 
 
@@ -107,16 +108,13 @@ html {
 
 body {
   margin: 0;
-  padding: 0;
   background: #ffffff;
   color: #111111;
-  /* Tailwind automatically uses --font-sans for body now, 
-     but keeping this line is also fine for safety */
-  font-family: "Lato";
+  font-family: var(--font-sans);
 }
 
-h1, h2, h3, h4, h5, h6{
-  font-family: "Optima";
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
 }
 
 header{
