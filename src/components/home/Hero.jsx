@@ -1,25 +1,36 @@
-import PropertySearch from "../PropertySearch"; // Adjust this path if needed
+import StageSection from "@/components/StageSection";
 
-export default function Hero() {
+export default function Hero({ data, children }) {
+  const { video, mobileVideo, poster, mobilePoster } = data;
+
   return (
-    <section className="relative h-screen w-full  flex-col items-center flex">
-      
-      {/* Background Video */}
-      <video
-        className="absolute inset-0 h-full w-full object-cover"
-        autoPlay
-        muted
-        loop
-        playsInline
+    <StageSection id="top" aria-label={data.alt} className="h-svh">
+      <h1 className="sr-only">{data.title}</h1>
+
+      <div
+        className="absolute inset-0 will-change-transform"
+        style={{ transform: "translate3d(0, calc(var(--cover, 0) * 60px), 0) scale(calc(1.05 - var(--cover, 0) * 0.03))" }}
       >
-        <source src="/videos/emaar.mp4" type="video/mp4" />
-      </video>
+        {/* Mobile video (sirf < 768px par dikhti hai) */}
+        {mobileVideo && (
+          <video
+            className="h-full w-full object-cover md:hidden"
+            src={mobileVideo}
+            poster={mobilePoster ?? poster}
+            autoPlay muted loop playsInline preload="auto"
+          />
+        )}
 
-      {/* Optional: Add a slight dark gradient/overlay so the white search bar stands out over bright videos */}
+        {/* Desktop video (768px se upar; mobileVideo na ho to sab par) */}
+        <video
+          className={`h-full w-full object-cover ${mobileVideo ? "hidden md:block" : ""}`}
+          src={video}
+          poster={poster}
+          autoPlay muted loop playsInline preload="auto"
+        />
+      </div>
 
-      {/* Property Search Bar Component */}
-      <PropertySearch />
-      
-    </section>
+      {children}
+    </StageSection>
   );
 }

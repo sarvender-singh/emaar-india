@@ -1,18 +1,38 @@
+import { notFound } from "next/navigation";
+import ScrollStage from "@/components/ScrollStage";
 import Hero from "@/components/home/Hero";
-import PremiumProperties from "@/components/home/PremiumProperties";
-import DiscoverSection from "@/components/home/DiscoverSection";
-import LandmarkDevelopments from "@/components/home/LandmarkDevelopments";
-import MobileHomeActions from "@/components/MobileHomeActions";
+import HeroSearch from "@/components/home/HeroSearch";
+import LaunchStack from "@/components/home/LaunchStack";
+import DevelopmentsRail from "@/components/home/DevelopmentsRail";
+import { getPage } from "@/services/pageService";
+import CommunitiesCollage from "@/components/home/CommunitiesCollage";
+import ShowcaseMosaic from "@/components/home/ShowcaseMosaic";
+import LegacyStats from "@/components/home/LegacyStats";
+import PressRail from "@/components/home/PressRail";
+import ConverseCta from "@/components/home/ConverseCta";
 
 
-export default function Home() {
+// generateMetadata jaisa tha waisa
+
+export default async function Home() {
+  const page = await getPage("home");
+  if (!page) notFound();
+
   return (
-    <main className="flex min-h-screen w-full flex-col items-center gap-8 py-0 lg:gap-12">
-      <Hero />
-      <MobileHomeActions/>
-      <PremiumProperties /> 
-      <DiscoverSection />
-      <LandmarkDevelopments />
-    </main>
+    <ScrollStage>
+      <Hero data={page.hero}>
+        <HeroSearch data={page.search} />
+      </Hero>
+      <LaunchStack data={page.launches} />
+      <DevelopmentsRail data={page.developments} />
+      <DevelopmentsRail data={page.underDevelopment} />
+      <LaunchStack data={page.communitiesIntro} />
+      <CommunitiesCollage data={page.communities} />
+      <LaunchStack data={page.propertiesIntro} />
+      <ShowcaseMosaic data={page.showcase} />
+      <LegacyStats data={page.legacy} />
+      <PressRail data={page.press} />
+      <ConverseCta data={page.converse} />
+    </ScrollStage>
   );
 }
