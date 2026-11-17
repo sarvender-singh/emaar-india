@@ -35,7 +35,7 @@ export const footer = {
         { label: "WhatsApp", href: "https://wa.me/911234567890", external: true, mobileOnly: true },
         { label: "Customer support", href: "mailto:support@emaarindia.com" },
         { label: "Emaar One app", href: "/emaar-one-app" },
-        { label: "Contact Us", href: "/contact" },
+        { label: "Contact Us", href: "/contact-us" },
       ],
     },
   ],

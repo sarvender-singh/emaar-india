@@ -68,11 +68,11 @@ export const home = {
   cue: "Scroll to explore",
   exploreLabel: "Explore",
  items: [
-  { slug: "serenity-hills", name: "Serenity Hills", city: "Gurugram", type: "Residential", config: "3 BHK",
+  { slug: "serenity-hills", name: "Serenity Hills", city: "Gurugram", type: "Residential", config: "3&4 BHK",
     image: "/images/launches/serenity-hills.png",        // poster
     video: "/videos/serenity-hills.mp4",
     href: "/properties/emaar-serenity-hills" },
-  { slug: "elara", name: "Elara", city: "Lucknow", type: "Residential", config: "3 BHK",
+  { slug: "elara", name: "Elara", city: "Lucknow", type: "Residential", config: "3&4 BHK",
     image: "/images/launches/elara.png",
     video: "/videos/elara.mp4",
     href: "/properties/elara" },
@@ -85,7 +85,7 @@ export const home = {
   name: "Elite Oasis",
   city: "Lucknow",
   type: "Residential",
-  config: "2 & 3 BHK",
+  config: "3&4 BHK",
   image: "/images/launches/elite-oasis.png",
   video: "/videos/elite-oasis.mp4",
   href: "/properties/elite-oasis"
@@ -104,7 +104,7 @@ export const home = {
     slug: "serenity-hills",
     name: "Serenity Hills",
     city: "Gurugram",
-    type: "Residential / 3 BHK",
+    type: "Residential / 3&4 BHK",
     image: "/images/developments/Serenity-hills.webp",
     href: "/properties/emaar-serenity-hills"
   },
@@ -112,7 +112,7 @@ export const home = {
     slug: "elara",
     name: "ELARA",
     city: "Lucknow",
-    type: "Residential / 3 BHK",
+    type: "Residential / 3&4 BHK",
     image: "/images/developments/Elara.webp",
     href: "/properties/elara"
   },
@@ -178,7 +178,7 @@ export const home = {
     slug: "serenity-hills",
     name: "Serenity Hills",
     city: "Gurugram",
-    type: "Residential / 3 BHK",
+    type: "Residential / 3&4 BHK",
     image: "/images/developments/Serenity-hills.webp",
     href: "/properties/serenity-hills"
   },

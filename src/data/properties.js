@@ -98,21 +98,57 @@ export const properties = [
         { icon: "party", label: "Club Party Lawn" },
       ],
     },
-     location: {
+    location: {
   eyebrow: "Location",
-  mapTitle: "Map of Emaar Serenity Hills",
+  mapTitle: "Nearby places around Emaar Serenity Hills",
   openUrl: "https://www.google.com/maps/search/?api=1&query=Emaar+Serenity+Hills+Gurugram",
   openLabel: "Open in Google Maps",
-  origin: { name: "Serenity Hills", coords: [77.0660397, 28.4269689] }, // TODO: galat lag raha hai, project ka asli pin daalo
-  destinations: [
-    { name: "Cloverleaf (Dwarka Expy / NH-48)", coords: [76.9900132, 28.4069395] },
-    { name: "Delhi Public School",     coords: [76.9597526, 28.4063222] },
-    { name: "Apollo Cradle",           coords: [76.9530944, 28.3926184] },
-    { name: "Hyatt Regency",           coords: [76.9769075, 28.3919521] },
-    { name: "Iris Broadway",           coords: [76.9454175, 28.4035483] }, // approx, neeche dekho
-    { name: "St. Xavier's High School", coords: [77.0579754, 28.407035] }, // neeche dekho
+  origin: { name: "Emaar Serenity Hills", coords: [76.9484103, 28.3992572] }, // [lng, lat]
+  categories: [
+    {
+      name: "Schools", color: "#2563eb",
+      osm: '["amenity"="school"]', radius: 5000,
+      places: [
+        { name: "Delhi Public School", coords: [76.9597526, 28.4063222] },
+        { name: "ODM International School", coords: [77.0457253, 28.4110156], query: "ODM International School Gurugram" },
+        { name: "RPS International School",coords: [77.0380005, 28.4110388], query: "RPS International School Sector 92 Gurugram" },
+        { name: "Shishu Kalyan School", query: "Shishu Kalyan School Gurugram" },
+        { name: "The i-School", query: "The i-School Sector 67 Gurugram" },
+      ],
+    },
+    {
+      name: "Hospitals", color: "#dc2626",
+      osm: '["amenity"="hospital"]', radius: 8000,
+      places: [
+        { name: "Apollo Cradle", coords: [76.9530944, 28.3926184] },
+        { name: "Park Hospital", query: "Park Hospital Sohna Road Gurugram" },
+        { name: "Indrashila Hospital", query: "Indrashila Hospital Gurugram" },
+        { name: "Neuwell Hospital", query: "Neuwell Hospital Gurugram" },
+        { name: "SilverStreak Multispeciality Hospital", query: "SilverStreak Multispeciality Hospital Gurugram" },
+      ],
+    },
+    {
+      name: "Hotels", color: "#16a34a",
+      osm: '["tourism"="hotel"]', radius: 8000,
+      places: [
+        { name: "Hyatt Regency Gurgaon", coords: [76.9769075, 28.3919521] },
+        { name: "IRIS Sarovar Portico", query: "IRIS Sarovar Portico Gurugram" },
+        { name: "Holiday Inn Gurugram Sector 90", query: "Holiday Inn Gurugram Sector 90" },
+        { name: "Golden Tulip Sector 80", query: "Golden Tulip Sector 80 Gurugram" },
+        { name: "Saltstayz Premier Manesar", query: "Saltstayz Premier Manesar Sector 86 Gurugram" },
+      ],
+    },
+    {
+      name: "Malls", color: "#9333ea",
+      osm: '["shop"="mall"]', radius: 8000,
+      places: [{ name: "Iris Broadway", coords: [76.9454175, 28.4035483] }],
+    },
+    {
+      name: "Connectivity", color: "#111111",
+      places: [{ name: "Cloverleaf (Dwarka Expy / NH-48)", coords: [76.9900132, 28.4069395] }],
+    },
   ],
-  note: "Select a destination to see the drive from Serenity Hills; distances and drive times are estimates based on OpenStreetMap data. Emaar lists these as nearby.",
+  note: "Select a category to see places nearby, then tap a marker for the drive from Serenity Hills. Distances and drive times are estimates based on OpenStreetMap data.",
 },
         connectivity: {
       title: "Connected to Gurugram. Closer to Calm.",

@@ -1,9 +1,11 @@
 import { header } from "@/data/header";
 import { footer } from "@/data/footer";
 import { home } from "@/data/home";
+import { about } from "@/data/about";
+import { contact } from "@/data/contact";
+import { faq } from "@/data/faq";
 
-// Naya page add karna ho to yahan ek line (jab tak API ready nahi)
-const mock = { header, footer, home };
+const mock = { header, footer, home, about, contact, faq };
 
 export async function getPage(slug, { revalidate = 60 } = {}) {
   const base = process.env.API_URL;

@@ -49,7 +49,7 @@ export default async function PropertyPage({ params }) {
       {property.highlights?.items?.length > 0 && <PropertyHighlights data={property.highlights} />}
       {property.gallery?.tabs?.length > 0 && <PropertyGallery data={property.gallery} />}
       {property.amenities?.items?.length > 0 && <PropertyAmenities data={property.amenities} />}
-{property.location?.origin && <PropertyLocation data={property.location} />}
+    {property.location?.origin && <PropertyLocation data={property.location} />}
       {property.connectivity && <PropertyConnectivity data={property.connectivity} />}
     </main>
   );

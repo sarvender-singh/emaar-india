@@ -75,7 +75,7 @@ export const header = {
       },
     },
     { label: "Sustainability", href: "/sustainability" },
-    { label: "About Emaar", href: "/about" },
+    { label: "About Emaar", href: "/about-emaar" },
   ],
 
   contact: {
@@ -101,6 +101,6 @@ export const header = {
     { label: "Residential", href: "/projects/residential/ongoing" },
     { label: "Commercial", href: "/projects/commercial/ongoing" },
     { label: "Sustainability", href: "/sustainability" },
-    { label: "About Emaar", href: "/about" },
+    { label: "About Emaar", href: "/about-emaar" },
   ],
 };
