@@ -336,18 +336,48 @@ export default function PropertyLocation({ data }) {
     const bounds = new maplibregl.LngLatBounds(origin.coords, origin.coords);
     let count = 0;
 
+          // All = sirf dots, category select = dot + naam
+    const showLabels = activeCat !== null;
+
     visible.forEach((cat) => {
       (poi[cat.name] || []).forEach((p) => {
         const el = document.createElement("button");
         el.type = "button";
-        el.title = p.name;
+        el.title = p.name; // All mode mein hover karne par naam tooltip mein dikhega
         el.setAttribute("aria-label", p.name);
-        el.style.cssText = `width:16px;height:16px;border-radius:50%;background:${cat.color || "#111"};border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.45);cursor:pointer;padding:0`;
+        el.className = "mlp-pin";
+        el.style.cssText =
+          "display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:0;padding:0;cursor:pointer";
+
+        // Dot
+        const dot = document.createElement("span");
+        dot.style.cssText = `width:14px;height:14px;border-radius:50%;background:${cat.color || "#111"};border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.45)`;
+
+        // Naam ka label sirf tab jab koi category select ho
+        if (showLabels) {
+          const label = document.createElement("span");
+          label.textContent = p.name;
+          label.style.cssText =
+            "max-width:120px;padding:2px 6px;background:#fff;color:#111;font:600 10px/1.3 system-ui,sans-serif;" +
+            "white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 1px 4px rgba(0,0,0,.35);" +
+            `border-bottom:2px solid ${cat.color || "#111"}`;
+          el.append(label, dot);
+        } else {
+          el.append(dot);
+        }
+
         el.addEventListener("click", (e) => {
           e.stopPropagation();
           setSelected(p);
         });
-        const m = new maplibregl.Marker({ element: el }).setLngLat(p.coords).addTo(map);
+
+        // Label ke saath "bottom" anchor, sirf dot ho to "center"
+        const m = new maplibregl.Marker({
+          element: el,
+          anchor: showLabels ? "bottom" : "center",
+        })
+          .setLngLat(p.coords)
+          .addTo(map);
         poiMarkersRef.current.push(m);
         bounds.extend(p.coords);
         count++;

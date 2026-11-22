@@ -68,10 +68,9 @@ export const about = {
         // n / nav / label nahi hai -> index me nahi aayega, label bhi nahi dikhega
         title: "Our Businesses",
         items: [
-          { tag: "Hospitality", title: "Emaar Hospitality", href: "/other-emaar-businesses/emaar-hospitality", image: "/images/about/emaar-hospitality.jpg" },
-          { tag: "Retail", title: "Emaar Malls", href: "/other-emaar-businesses/emaar-malls", image: "/images/about/emaar-malls.jpg" },
-          { tag: "Destination", title: "Burj Khalifa", href: "/other-emaar-businesses/burj-khalifa", image: "/images/about/burj-khalifa.jpg" },
-          { tag: "Leisure", title: "Emaar Entertainment", href: "/other-emaar-businesses/emaar-entertainment", image: "/images/about/emaar-entertainment.jpg" },
+          { tag: "Residential", title: "Emaar India Residential", href: "/emaar-india-residential", image: "/images/about/Residential.webp" },
+          { tag: "Commercial", title: "Emaar India Commercial", href: "/emaar-india-commercial", image: "/images/about/Commercial.webp" },
+          
         ],
       },
       {
@@ -118,7 +117,7 @@ export const about = {
     { title: "Middle East's Leading Tourist Attraction", by: "World Travel Awards™ | 2017" },
     { title: "The Best Hotel Residences in the Middle East", by: "Haute Grandeur Global Awards | 2016" },
   ],
-  cta: { label: "View more", href: "/awards" },
+  cta: { label: "View more", href: "/about-emaar/awards" },
 },
       {
   id: "responsibility",
@@ -129,7 +128,7 @@ export const about = {
   title: "Governance, sustainability and the foundation.",
   items: [
     { k: "Investor Relations", v: "Emaar is a Public Joint Stock Company listed on the Dubai Financial Market. Explore its stock market performance and related information.", href: "/investor-relations" },
-    { k: "Environment Policy", v: "Emaar is committed to protecting the environment and ensuring the sustainability of its communities.", href: "/emaar-sustainability" },
+    { k: "Environment Policy", v: "Emaar is committed to protecting the environment and ensuring the sustainability of its communities.", href: "/about-emaar/environmental-policy" },
     { k: "Emaar Foundation", v: "The Emaar Foundation serves as the group's apex entity for driving corporate social responsibility initiatives.", href: "/about-emaar/emaar-foundation" },
   ],
 },
@@ -140,7 +139,7 @@ export const about = {
     items: [
       { title: "Investor relations", text: "Results, reports and share information for Emaar Properties PJSC.", href: "/investor-relations" },
       { title: "Sustainability", text: "How sustainability is governed and reported across Emaar's businesses.", href: "/emaar-sustainability" },
-      { title: "Latest press releases", text: "Corporate announcements, results and project news.", href: "/press-release-listing" },
+      { title: "Media", text: "Corporate announcements, results and project news.", href: "/media" },
       { title: "Careers", text: "Work on what gets built next.", href: "/careers" },
     ],
   },

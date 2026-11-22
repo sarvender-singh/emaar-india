@@ -23,7 +23,7 @@ function Routes({ s }) {
               {ICONS[r.icon]}
             </svg>
             <p className={`${EYEBROW} mt-5`}>{r.k}</p>
-            <p className="m-0 font-serif text-[28px] font-light text-[#111]">{r.v}</p>
+            <p className="m-0 font-serif text-[20px] font-light text-[#111]">{r.v}</p>
             {r.m && <p className="m-0 mt-4 text-[14px] text-[#1c1a17]/65">{r.m}</p>}
           </a>
         </li>

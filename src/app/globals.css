@@ -256,3 +256,7 @@ button {
 @media (prefers-reduced-motion: reduce) {
   .rule-draw { animation: none; }
 }
+
+.mlp-pin:hover,
+.mlp-pin:focus-visible { z-index: 5; }
+.maplibregl-marker { z-index: 1; }

@@ -13,10 +13,21 @@ export const contact = {
     ],
     railLabel: "Contact",
     facts: [
-      { label: "Toll free within the UAE, 24/7", text: "800 EMAAR (36227)", href: "tel:80036227" },
-      { label: "From outside the UAE", text: "+971 4 366 1688", href: "tel:+97143661688" },
-      { label: "Offices", text: "15 locations across nine countries", href: "#offices" },
-    ],
+  {
+    label: "Customer care hours",
+    text: "10:00 AM – 6:00 PM, Monday to Saturday",
+  },
+  {
+    label: "Post Sales Assistance",
+    text: "1800-103-3643",
+    href: "tel:18001033643",
+  },
+  {
+    label: "Sales Enquiry",
+    text: "+91 22 3528 0992",
+    href: "tel:+912235280992",
+  },
+],
     title: "Contact Us",
     lede: "Speak to our team or send us an enquiry. Our contact details and office locations are listed below.",
     actions: [
@@ -31,12 +42,39 @@ export const contact = {
         id: "now", type: "routes", n: "01", nav: "Contact options", label: "01. Contact options",
         title: "How to reach us",
         text: "Call us, message us on WhatsApp or use the enquiry form below.",
-        items: [
-          { icon: "phone", k: "Toll free within the UAE", v: "800 EMAAR (36227)", m: "Available 24 hours a day, seven days a week.", href: "tel:80036227" },
-          { icon: "globe", k: "From outside the UAE", v: "+971 4 366 1688", href: "tel:+97143661688" },
-          { icon: "chat", k: "WhatsApp", v: "+971 4 888 8887", href: "https://wa.me/97148888887" },
-          { icon: "mail", k: "Enquiry form", v: "Send an enquiry", href: "#enquire" },
-        ],
+       items: [
+  {
+    icon: "phone",
+    k: "Customer care hours",
+    v: "10:00 AM – 6:00 PM, Monday to Saturday",
+    m: "Except public holidays.",
+  },
+  {
+    icon: "phone",
+    k: "Post Sales Assistance (Toll Free)",
+    v: "1800-103-3643",
+    href: "tel:18001033643",
+  },
+  {
+    icon: "globe",
+    k: "Calling from outside India",
+    v: "+91-124-4416306",
+    m: "International call rates may apply.",
+    href: "tel:+911244416306",
+  },
+  {
+    icon: "phone",
+    k: "Sales Enquiry",
+    v: "+91 22 3528 0992",
+    href: "tel:+912235280992",
+  },
+  {
+    icon: "mail",
+    k: "Enquiry form",
+    v: "Send an enquiry",
+    href: "#enquire",
+  },
+],
       },
       {
         id: "enquire", type: "form", n: "02", nav: "Send an enquiry", label: "02. Send an enquiry",

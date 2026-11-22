@@ -53,8 +53,8 @@ function RowLink({ href, external, className, children }) {
   );
 }
 
-const ROWS = "mt-10 border-t border-[#1c1a17]/10";
-const ROW = "flex items-center justify-between gap-6 border-b border-[#1c1a17]/10";
+const ROWS = "mt-10 border-t border-[#11111112]";
+const ROW = "flex items-center justify-between gap-6 border-b border-[#11111112]";
 
 /* ---------- sections ---------- */
 
@@ -97,7 +97,7 @@ function Record({ s }) {
           <div
             key={it.value}
             data-testid="about-emaar-ledger-item"
-            className="grid items-center gap-3 border-b border-[#1c1a17]/10 py-7 sm:grid-cols-[1fr_1.15fr] sm:gap-10"
+            className="grid items-center gap-3 border-b border-[#11111112] py-7 sm:grid-cols-[1fr_1.15fr] sm:gap-10"
           >
             <dt className="font-serif text-[32px] font-light leading-none text-[#111] sm:text-[38px]">{it.value}</dt>
             <dd className="m-0 max-w-[330px] text-[12.5px] leading-[1.6] text-[#1c1a17]/70">
@@ -150,7 +150,7 @@ function Businesses({ s }) {
           <RowLink
             key={it.href}
             href={it.href}
-            className="grid items-center gap-5 border-b border-[#1c1a17]/10 py-7 sm:grid-cols-[minmax(0,333px)_1fr_auto] sm:gap-[46px]"
+            className="grid items-center gap-5 border-b border-[#11111112] py-7 sm:grid-cols-[minmax(0,333px)_1fr_auto] sm:gap-[46px]"
           >
             <span className="relative block aspect-[333/208] w-full overflow-hidden bg-black/5">
               <Image src={it.image} alt="" fill sizes="(min-width:640px) 333px, 100vw" quality={80} className="object-cover" />
@@ -210,12 +210,12 @@ function Awards({ s }) {
   return (
     <>
       <Heading>{s.title}</Heading>
-      <dl data-testid="about-emaar-ledger" className="m-0 mt-10 border-t border-[#1c1a17]/10">
+      <dl data-testid="about-emaar-ledger" className="m-0 mt-10 border-t border-[#11111112]">
         {s.items.map((it) => (
           <div
             key={it.title}
             data-testid="about-emaar-ledger-item"
-            className="grid gap-2 border-b border-[#1c1a17]/10 py-6 sm:grid-cols-[330px_1fr] sm:gap-10"
+            className="grid gap-2 border-b border-[#11111112] py-6 sm:grid-cols-[330px_1fr] sm:gap-10"
           >
             <dt className="font-serif text-[19px] font-light leading-[1.4] text-[#111] sm:text-[21px]">{it.title}</dt>
             <dd className="m-0 text-[12.5px] leading-[1.6] text-[#1c1a17]/70">{it.by}</dd>
@@ -247,7 +247,7 @@ function Responsibility({ s }) {
             key={it.href}
             href={it.href}
             data-testid="about-emaar-route-link"
-            className="group flex flex-col border border-[#1c1a17]/10 bg-white p-[30px] transition-shadow duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
+            className="group flex flex-col border border-[#11111112] bg-white p-[30px] transition-shadow duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
           >
             <p className={`${TAG} m-0`}>{it.k}</p>
             <p className="mb-0 mt-5 flex-1 font-serif text-[20px] font-light leading-[1.35] text-[#111]">{it.v}</p>
@@ -278,7 +278,7 @@ export default function AboutSpine({ data }) {
 
   return (
     <div data-testid="about-emaar-spine" className="px-[clamp(20px,4vw,64px)] pb-24 text-[#1c1a17] lg:px-[max(5vw,32px)]">
-      <div className="grid gap-12 lg:grid-cols-[220px_1fr] lg:gap-[5vw]">
+      <div className="grid gap-12 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-[5vw]">
         <AboutIndex label={indexLabel} items={items} />
 
         <div data-testid="about-emaar-spine-body" className="min-w-0 lg:max-w-[1050px]">
@@ -290,7 +290,7 @@ export default function AboutSpine({ data }) {
                 key={s.id}
                 id={s.id}
                 data-testid="about-emaar-section"
-                className="scroll-mt-[calc(var(--hdr-h)+24px)] border-t border-[#1c1a17]/10 py-14 first:border-t-0 first:pt-0 sm:py-20 sm:first:pt-0"
+                className="scroll-mt-[calc(var(--hdr-h)+24px)] border-t border-[#11111124] py-14 first:border-t-0 first:pt-0 sm:py-20 sm:first:pt-0"
               >
                 {s.label && <p className={LABEL}>{s.label}</p>}
                 <Body s={s} />
