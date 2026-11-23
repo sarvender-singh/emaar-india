@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import FooterPreferences from "@/components/privacy/FooterPreferences";
 import { usePathname } from "next/navigation";
 import { EnquiryButton } from "@/components/EnquiryModal";
 import { SocialIcon, WhatsappIcon } from "@/components/ui/icons";
@@ -182,7 +183,7 @@ export default function Footer({ data }) {
       {/* BOTTOM */}
       <div className="flex flex-wrap items-center gap-x-[30px] gap-y-4 px-[clamp(22px,5vw,88px)] py-[clamp(22px,3.4vw,44px)]">
         <Link
-          href={bottom.exploreAll.href}
+          href={bottom.exploreAll.href === "/sitemap" ? "/html-sitemap" : bottom.exploreAll.href}
           data-testid="site-footer-explore-all"
           className="hidden items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] hover:text-white/80 lg:inline-flex"
         >
@@ -205,6 +206,7 @@ export default function Footer({ data }) {
               {l.label}
             </Link>
           ))}
+            <FooterPreferences />
         </div>
       </div>
     </footer>

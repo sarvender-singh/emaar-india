@@ -19,7 +19,7 @@ export const footer = {
       links: [
         { label: "Who we are", href: "/about-emaar" },
         { label: "Awards", href: "/about-emaar/awards" },
-        { label: "Career", href: "/career" },
+        { label: "Career", href: "/careers" },
         { label: "Emaar Foundation", href: "/about-emaar/emaar-foundation" },
         { label: "Environmental Policy", href: "/about-emaar/environmental-policy" },
         { label: "Blogs", href: "/blog" },
@@ -52,7 +52,7 @@ export const footer = {
       { label: "Privacy Policy", href: "/privacy-policy" },
       { label: "Disclaimer", href: "/disclaimer" },
       { label: "Terms & Conditions", href: "/terms-and-conditions" },
-      { label: "Country & Language", href: "/country-language" },
+      { label: "Country & Language", href: "https://www.emaar.com/en" },
     ],
   },
 };

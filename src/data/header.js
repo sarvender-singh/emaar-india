@@ -51,15 +51,15 @@ export const header = {
           {
             title: "Residential",
             links: [
-              { label: "Ongoing", sub: "Now selling", href: "/projects/residential/ongoing" },
-              { label: "Completed", sub: "Delivered homes", href: "/projects/residential/completed" },
+              { label: "Ongoing", sub: "Now selling", href: "/properties/residential/ongoing" },
+              { label: "Completed", sub: "Delivered homes", href: "/properties/residential/completed" },
             ],
           },
           {
             title: "Commercial",
             links: [
-              { label: "Ongoing", sub: "Under development", href: "/projects/commercial/ongoing" },
-              { label: "Completed", sub: "Delivered spaces", href: "/projects/commercial/completed" },
+              { label: "Ongoing", sub: "Under development", href: "/properties/commercial/ongoing" },
+              { label: "Completed", sub: "Delivered spaces", href: "/properties/commercial/completed" },
             ],
           },
         ],
@@ -74,7 +74,7 @@ export const header = {
         },
       },
     },
-    { label: "Sustainability", href: "/sustainability" },
+    { label: "Sustainability", href: "/about-emaar/environmental-policy" },
     { label: "About Emaar", href: "/about-emaar" },
   ],
 

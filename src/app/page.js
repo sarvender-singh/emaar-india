@@ -10,6 +10,7 @@ import ShowcaseMosaic from "@/components/home/ShowcaseMosaic";
 import LegacyStats from "@/components/home/LegacyStats";
 import PressRail from "@/components/home/PressRail";
 import ConverseCta from "@/components/home/ConverseCta";
+import HomeLoader from "@/components/intro/HomeLoader";
 
 
 // generateMetadata jaisa tha waisa
@@ -19,6 +20,8 @@ export default async function Home() {
   if (!page) notFound();
 
   return (
+   <>
+         <HomeLoader data={page.loader} />
     <ScrollStage>
       <Hero data={page.hero}>
         <HeroSearch data={page.search} />
@@ -34,5 +37,6 @@ export default async function Home() {
       <PressRail data={page.press} />
       <ConverseCta data={page.converse} />
     </ScrollStage>
+   </>
   );
 }

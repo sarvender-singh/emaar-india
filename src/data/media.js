@@ -110,9 +110,9 @@ const coverages = [
 ];
 
 const pressReleases = [
-  m("15 Nov, 2024", "Emaar India sets a new benchmark: Offering Bespoke, Luxurious & Sustainable Living", "2024/11/Amaris-653x462-1.jpg", "https://in.emaar.com/en/press-release-listing/emaar-india-sets-a-new-benchmark-offering-bespoke-luxurious-sustainable-living/"),
-  m("21 Oct, 2024", "Emaar India announces its entry in the Maharashtra Market", "2024/11/Casa-Venero-653x462-1.jpg", "https://in.emaar.com/en/press-release-listing/emaar-india-announces-its-entry-in-the-maharashtra-market/"),
-  m("08 Oct, 2024", 'Emaar India Empowers Construction Workers with "Shram" Skill Development Program', "2024/10/Shram.jpg", "https://in.emaar.com/en/press-release-listing/emaar-india-empowers-construction-workers-with-shram-skill-development-program/"),
+  m("15 Nov, 2024", "Emaar India sets a new benchmark: Offering Bespoke, Luxurious & Sustainable Living", "2024/11/Amaris-653x462-1.jpg", "/press-release-listing/emaar-india-sets-a-new-benchmark-offering-bespoke-luxurious-sustainable-living"),
+  m("21 Oct, 2024", "Emaar India announces its entry in the Maharashtra Market", "2024/11/Casa-Venero-653x462-1.jpg", "/press-release-listing/emaar-india-announces-its-entry-in-the-maharashtra-market"),
+  m("08 Oct, 2024", 'Emaar India Empowers Construction Workers with "Shram" Skill Development Program', "2024/10/Shram.jpg", "/press-release-listing/emaar-india-empowers-construction-workers-with-shram-skill-development-program"),
 ];
 
 const videos = [

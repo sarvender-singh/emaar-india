@@ -260,3 +260,19 @@ button {
 .mlp-pin:hover,
 .mlp-pin:focus-visible { z-index: 5; }
 .maplibregl-marker { z-index: 1; }
+
+[data-testid="home-loader"] {
+  z-index: 1000;
+}
+
+body:has([data-testid="home-loader"]) .site-header {
+  z-index: 1001;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  pointer-events: none;
+}
+html[data-intro="playing"] .site-header .hdr-logo {
+  filter: brightness(0) invert(1);
+}

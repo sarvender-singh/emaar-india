@@ -15,7 +15,8 @@ export async function generateMetadata() {
   };
 }
 
-export default async function MediaPage() {
+export default async function MediaPage({ searchParams }) {
+  const { tab } = await searchParams;
   const page = await getPage("media");
   if (!page) notFound();
 
@@ -31,11 +32,11 @@ export default async function MediaPage() {
     })),
   };
 
-  return (
+ return (
     <main id="main-content" data-testid="media-page" className="w-full bg-[#f6f3ec] pt-[var(--hdr-h)]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <MediaMasthead data={masthead} />
-      {spine?.tabs?.length > 0 && <MediaSpine data={spine} />}
+      {spine?.tabs?.length > 0 && <MediaSpine data={spine} initialTab={tab} />}
     </main>
   );
 }

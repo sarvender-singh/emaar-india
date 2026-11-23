@@ -1,0 +1,280 @@
+diff --git a/src/app/html-sitemap/page.js b/src/app/html-sitemap/page.js
+new file mode 100644
+index 0000000..3becb44
+--- /dev/null
++++ b/src/app/html-sitemap/page.js
+@@ -0,0 +1,68 @@
++import Link from "next/link";
++import { getPosts } from "@/services/blogService";
++import { getPressReleases } from "@/services/pressService";
++import { properties } from "@/data/properties";
++import { STATUSES, projectHref } from "@/data/projects";
++import styles from "./sitemap.module.css";
++
++export const metadata = {
++  title: "HTML Sitemap",
++  description: "Explore Emaar India properties, company information, news and resources.",
++  alternates: { canonical: "/html-sitemap" },
++};
++
++export default async function HtmlSitemap() {
++  const [posts, releases] = await Promise.all([getPosts(), getPressReleases()]);
++  const groups = [
++    ["about", "About Emaar Properties", [
++      ["Home", "/"], ["Overview", "/about-emaar"], ["Contact Us", "/contact-us"],
++      ["FAQ", "/faq"], ["Careers", "/careers"], ["Awards", "/about-emaar/awards"],
++    ]],
++    ["media", "Media & Publishing", [
++      ["Media", "/media"], ["Latest Press Releases", "/press-release-listing"], ["Emaar Blogs", "/blog"],
++    ]],
++    ["sustainability", "Emaar Sustainability", [
++      ["Environmental Policy", "/about-emaar/environmental-policy"], ["Emaar Foundation", "/about-emaar/emaar-foundation"],
++    ]],
++    ["discover", "Explore Properties", [
++      ["Latest Launches", "/latest-launches"], ["Residential Properties", "/properties/residential"],
++      ["Commercial Properties", "/properties/commercial"],
++    ]],
++    ["investors", "Investor Relations", [["Investor Relations", "/investor-relations"], ["Compliance", "/compliance"]]],
++    ["collections", "Property Collections", ["residential", "commercial"].flatMap(category =>
++      STATUSES.map(status => [
++        [status, category].map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ") + " Properties",
++        `/properties/${category}/${status}`,
++      ])
++    )],
++    ["properties", "List of Our Properties", properties.map(p => [p.name, projectHref(p.slug)])],
++    ["blogs", "Emaar Blogs", posts.map(p => [p.title, `/blog/${p.slug}`])],
++    ["press", "Latest Press Releases", releases.map(p => [p.title, `/press-release-listing/${p.slug}`])],
++    ["pages", "Emaar Pages", [
++      ["Privacy Policy", "/privacy-policy"], ["Terms & Conditions", "/terms-and-conditions"], ["Disclaimer", "/disclaimer"],
++    ]],
++  ].filter(([, , links]) => links.length);
++
++  return (
++    <main id="main-content" className={styles.page}>
++      <div className={styles.inner}>
++        <h1>HTML Sitemap</h1>
++        <div className={styles.layout}>
++          <nav className={styles.index} aria-label="Sitemap sections">
++            {groups.map(([id, title], index) => (
++              <a key={id} href={`#${id}`}><small>{String(index + 1).padStart(2, "0")}</small>{title}</a>
++            ))}
++          </nav>
++          <div className={styles.groups}>
++            {groups.map(([id, title, links]) => (
++              <section key={id} id={id} tabIndex={-1}>
++                <h2>{title}</h2>
++                <ul>{links.map(([label, href]) => <li key={href}><Link href={href}>{label}</Link></li>)}</ul>
++              </section>
++            ))}
++          </div>
++        </div>
++      </div>
++    </main>
++  );
++}
+diff --git a/src/app/html-sitemap/sitemap.module.css b/src/app/html-sitemap/sitemap.module.css
+new file mode 100644
+index 0000000..3463908
+--- /dev/null
++++ b/src/app/html-sitemap/sitemap.module.css
+@@ -0,0 +1,23 @@
++.page { background: #f7f5f0; color: #171617; min-height: 100vh; padding: calc(var(--hdr-h) + clamp(46px, 5vw, 90px)) 5% clamp(90px, 9vw, 156px); }
++.inner { max-width: 1500px; margin: auto; }
++.page h1 { margin: 0 0 clamp(36px, 3.4vw, 64px); font: 400 clamp(36px, 3vw, 52px)/1.15 var(--font-serif); text-transform: uppercase; }
++.layout { display: grid; grid-template-columns: minmax(185px, 17.3%) minmax(0, 1fr); gap: clamp(32px, 4vw, 80px); align-items: start; }
++.index { position: sticky; top: calc(var(--hdr-h) + 16px); max-height: calc(100dvh - var(--hdr-h) - 32px); overflow: auto; }
++.index a { display: flex; align-items: baseline; gap: 14px; padding: 15px 12px; border-bottom: 1px solid #dedcd6; color: #64636a; font-size: 14px; }
++.index small { font-size: 10px; letter-spacing: .1em; }
++.index a:hover, .index a:focus-visible { color: #101c31; background: #edeae4; }
++.groups { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 52px clamp(24px, 3vw, 64px); }
++.groups section { scroll-margin-top: calc(var(--hdr-h) + 24px); }
++.groups section:target h2 { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
++.groups h2 { margin: 0 0 17px; font: 700 clamp(22px, 1.55vw, 28px)/1.25 var(--font-serif); color: #10243f; }
++.groups ul { padding: 0; margin: 0; list-style: none; }
++.groups li + li { margin-top: 9px; }
++.groups li a { font-size: 17px; line-height: 1.5; overflow-wrap: anywhere; }
++.groups li a:hover { text-decoration: underline; text-underline-offset: 4px; }
++@media (max-width: 1100px) { .groups { grid-template-columns: repeat(2,minmax(0,1fr)); } }
++@media (max-width: 760px) {
++  .layout { display: block; }
++  .index { position: static; display: flex; margin-bottom: 30px; }
++  .index a { flex: none; }
++}
++@media (max-width: 540px) { .groups { grid-template-columns: 1fr; gap: 34px; } }
+diff --git a/src/components/MobileDock.jsx b/src/components/MobileDock.jsx
+index 59fd69a..456bf8a 100644
+--- a/src/components/MobileDock.jsx
++++ b/src/components/MobileDock.jsx
+@@ -3,6 +3,7 @@
+ import { useEffect, useState } from "react";
+ import Image from "next/image";
+ import Link from "next/link";
++import FooterPreferences from "@/components/privacy/FooterPreferences";
+ import { usePathname } from "next/navigation";
+ import { DockIcon, SocialIcon, WhatsappIcon } from "@/components/ui/icons";
+ import { useEnquiry } from "@/components/EnquiryModal";
+@@ -211,7 +212,7 @@ export default function MobileDock({ header, footer }) {
+           </div>
+ 
+           <Link
+-            href={footer.bottom.exploreAll.href}
++            href={footer.bottom.exploreAll.href === "/sitemap" ? "/html-sitemap" : footer.bottom.exploreAll.href}
+             className="mt-11 flex min-h-14 items-center justify-between border border-white/20 px-4 font-nav text-[11px] font-semibold uppercase tracking-[0.2em] hover:bg-white/10"
+           >
+             <span>{footer.bottom.exploreAll.label}</span>
+@@ -240,6 +241,7 @@ export default function MobileDock({ header, footer }) {
+                 {l.label}
+               </Link>
+             ))}
++            <FooterPreferences onNavigate={() => setMore(false)} />
+             <p className="m-0 w-full text-xs text-white/40">{footer.bottom.copyright}</p>
+           </div>
+         </div>
+diff --git a/src/components/footer.jsx b/src/components/footer.jsx
+index d237612..e2e320b 100644
+--- a/src/components/footer.jsx
++++ b/src/components/footer.jsx
+@@ -3,6 +3,7 @@
+ import { useEffect, useRef, useState } from "react";
+ import Image from "next/image";
+ import Link from "next/link";
++import FooterPreferences from "@/components/privacy/FooterPreferences";
+ import { usePathname } from "next/navigation";
+ import { EnquiryButton } from "@/components/EnquiryModal";
+ import { SocialIcon, WhatsappIcon } from "@/components/ui/icons";
+@@ -182,7 +183,7 @@ export default function Footer({ data }) {
+       {/* BOTTOM */}
+       <div className="flex flex-wrap items-center gap-x-[30px] gap-y-4 px-[clamp(22px,5vw,88px)] py-[clamp(22px,3.4vw,44px)]">
+         <Link
+-          href={bottom.exploreAll.href}
++          href={bottom.exploreAll.href === "/sitemap" ? "/html-sitemap" : bottom.exploreAll.href}
+           data-testid="site-footer-explore-all"
+           className="hidden items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] hover:text-white/80 lg:inline-flex"
+         >
+@@ -205,6 +206,7 @@ export default function Footer({ data }) {
+               {l.label}
+             </Link>
+           ))}
++            <FooterPreferences />
+         </div>
+       </div>
+     </footer>
+diff --git a/src/components/privacy/FooterPreferences.jsx b/src/components/privacy/FooterPreferences.jsx
+new file mode 100644
+index 0000000..e619d9b
+--- /dev/null
++++ b/src/components/privacy/FooterPreferences.jsx
+@@ -0,0 +1,76 @@
++"use client";
++
++import Link from "next/link";
++import { useId, useRef, useState } from "react";
++import styles from "./preferences.module.css";
++
++const storageKey = "emaar-india-cookie-preferences-v1";
++const essentialOnly = { analytics: false, marketing: false };
++const options = [
++  ["analytics", "Analytics", "Anonymous figures on which pages are read and how the site performs, so we can improve it."],
++  ["marketing", "Marketing", "Lets us show you property and launch advertising that is relevant to you, here and elsewhere."],
++];
++
++export default function FooterPreferences({ onNavigate }) {
++  const dialog = useRef(null);
++  const titleId = useId();
++  const [choices, setChoices] = useState(essentialOnly);
++  const [error, setError] = useState("");
++
++  function open() {
++    let saved;
++    try {
++      saved = JSON.parse(localStorage.getItem(storageKey));
++    } catch {
++      // Storage can be disabled by the browser.
++    }
++    setChoices({ analytics: saved?.analytics === true, marketing: saved?.marketing === true });
++    setError("");
++    dialog.current.showModal();
++  }
++
++  function save(value) {
++    try {
++      localStorage.setItem(storageKey, JSON.stringify(value));
++    } catch {
++      setError("Your browser could not save these preferences. Allow site storage and try again.");
++      return;
++    }
++    window.dispatchEvent(new CustomEvent("emaar:cookie-preferences", { detail: value }));
++    dialog.current.close();
++  }
++
++  return (
++    <>
++      <Link className={styles.footerLink} href="/html-sitemap" onNavigate={onNavigate}>Sitemap</Link>
++      <button className={styles.footerLink} type="button" aria-haspopup="dialog" onClick={open}>Cookie preferences</button>
++      <dialog ref={dialog} className={styles.dialog} aria-labelledby={titleId}
++        onKeyDown={event => { if (event.key === "Escape") event.stopPropagation(); }}
++        onClick={event => { if (event.target === dialog.current) dialog.current.close(); }}>
++        <div className={styles.panel}>
++          <button type="button" className={styles.close} aria-label="Close cookie preferences" onClick={() => dialog.current.close()}>×</button>
++          <p className={styles.eyebrow}>Your privacy</p>
++          <h2 id={titleId}>Cookie preferences</h2>
++          <p className={styles.intro}>Choose what Emaar may record. You can change this at any time from the legal line at the foot of the page.</p>
++          <div className={styles.row}>
++            <div><strong>Essential</strong><p>Security, your chosen language, and remembering this decision. The site cannot work without them.</p></div>
++            <span className={styles.always}>Always on</span>
++          </div>
++          {options.map(([key, label, description]) => (
++            <div className={styles.row} key={key}>
++              <div><strong>{label}</strong><p>{description}</p></div>
++              <button type="button" className={styles.toggle} role="switch" aria-label={label} aria-checked={choices[key]}
++                onClick={() => setChoices(previous => ({ ...previous, [key]: !previous[key] }))} />
++            </div>
++          ))}
++          <div className={styles.actions}>
++            <button type="button" onClick={() => save(essentialOnly)}>Essential only</button>
++            <button type="button" onClick={() => save(choices)}>Save preferences</button>
++          </div>
++          {error && <p role="alert">{error}</p>}
++          <Link href="/privacy-policy" className={styles.policy} onClick={() => dialog.current.close()}>Read the full privacy policy.</Link>
++        </div>
++      </dialog>
++    </>
++  );
++}
+diff --git a/src/components/privacy/preferences.module.css b/src/components/privacy/preferences.module.css
+new file mode 100644
+index 0000000..742a132
+--- /dev/null
++++ b/src/components/privacy/preferences.module.css
+@@ -0,0 +1,31 @@
++.footerLink { color: rgb(255 255 255 / .65); font: inherit; }
++.footerLink:hover { color: white; }
++.dialog {
++  position: fixed; inset: 0; margin: auto; padding: 0; border: 0; border-radius: 2px;
++  width: min(600px, calc(100vw - 28px)); max-height: calc(100dvh - 28px);
++  background: #fbfaf7; color: #19181b; overflow-y: auto; overscroll-behavior: contain;
++  font: 400 16px/1.5 var(--font-sans); text-align: left;
++}
++.dialog::backdrop { background: rgb(18 17 15 / .61); backdrop-filter: blur(5px); }
++:global(html):has(.dialog[open]) { overflow: hidden; }
++.panel { position: relative; padding: clamp(24px, 4vw, 51px); }
++.close { position: absolute; top: clamp(24px, 4vw, 51px); right: clamp(24px, 4vw, 51px); width: 44px; height: 44px; border-radius: 50%; border: 1px solid #c9c7c2; font: 300 25px/1 var(--font-sans); }
++.eyebrow, .always, .actions button { font-weight: 600; text-transform: uppercase; letter-spacing: .23em; }
++.eyebrow, .always { font-size: 10px; color: #625f67; }
++.eyebrow::before { content: ""; display: block; width: 38px; height: 1px; background: #595650; margin-bottom: 16px; }
++.panel h2 { font: 400 clamp(30px, 5vw, 39px)/1.15 var(--font-serif); margin: 9px 25px 10px 0; }
++.intro, .row p { color: #776b58; }
++.intro { max-width: 420px; margin-bottom: 29px; font-size: 15px; }
++.row { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; border-top: 1px solid #dedbd5; padding: 20px 0; }
++.row p { font-size: 14px; margin: 6px 0 0; }
++.always { white-space: nowrap; margin-top: 3px; }
++.toggle { flex: 0 0 50px; height: 29px; margin-top: 8px; padding: 4px; border-radius: 18px; background: #77746f; }
++.toggle::after { content: ""; display: block; border-radius: 50%; width: 21px; height: 21px; background: white; transition: transform .15s; }
++.toggle[aria-checked="true"] { background: #19181b; }
++.toggle[aria-checked="true"]::after { transform: translateX(21px); }
++.actions { border-top: 1px solid #dedbd5; padding-top: 28px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
++.actions button { padding: 14px 6px; border: 1px solid #aaa7a2; min-height: 52px; font-size: 12px; }
++.actions button:last-child { background: #19181b; color: white; border-color: #19181b; }
++.policy { display: block; text-align: center; font-size: 13px; color: #656369; margin-top: 16px; }
++.policy:hover { text-decoration: underline; }
++@media (max-width: 420px) { .actions { grid-template-columns: 1fr; } }

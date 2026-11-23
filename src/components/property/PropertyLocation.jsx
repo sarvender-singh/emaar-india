@@ -2,12 +2,36 @@
 
 import { useEffect, useRef, useState } from "react";
 import "maplibre-gl/dist/maplibre-gl.css";
+import {
+  faGraduationCap,
+  faHospital,
+  faBed,
+  faBagShopping,
+  faRoad,
+} from "@fortawesome/free-solid-svg-icons";
 import SectionEyebrow from "./SectionEyebrow";
 
 const MAP_ICON =
   '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14M15 6v14"/></svg>';
 const CAR_ICON =
   '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11a2 2 0 0 1 2 2v4h-2v1.5a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V17H8v1.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V17H3v-4a2 2 0 0 1 2-2Zm2.2 0h9.6l-1-3H8.2l-1 3ZM6.5 15a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm11 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/></svg>';
+
+// category.icon (data mein) -> FontAwesome icon
+const ICONS = {
+  school: faGraduationCap,
+  hospital: faHospital,
+  hotel: faBed,
+  mall: faBagShopping,
+  road: faRoad,
+};
+
+// FontAwesome icon -> SVG string (marker plain DOM element hai, React component nahi)
+function faSvg(def, size = 12, color = "#fff") {
+  if (!def) return "";
+  const [w, h, , , path] = def.icon;
+  const d = Array.isArray(path) ? path.join("") : path;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${size}" height="${size}" fill="${color}" aria-hidden="true"><path d="${d}"/></svg>`;
+}
 
 const OVERPASS_URLS = [
   "https://overpass-api.de/api/interpreter",
@@ -66,7 +90,7 @@ function waitForStyle(map) {
 }
 
 // Naam se coordinates (Nominatim / OpenStreetMap, free)
-// FIX: bounded=1 hata diya, viewbox sirf preference hai (restriction nahi)
+// viewbox sirf preference hai (restriction nahi)
 async function geocode(query, origin, signal) {
   const [lng, lat] = origin;
   const d = 0.25; // origin ke aas-paas ~25 km box
@@ -336,7 +360,7 @@ export default function PropertyLocation({ data }) {
     const bounds = new maplibregl.LngLatBounds(origin.coords, origin.coords);
     let count = 0;
 
-          // All = sirf dots, category select = dot + naam
+    // All = sirf icon, category select = icon + naam
     const showLabels = activeCat !== null;
 
     visible.forEach((cat) => {
@@ -349,9 +373,10 @@ export default function PropertyLocation({ data }) {
         el.style.cssText =
           "display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:0;padding:0;cursor:pointer";
 
-        // Dot
+        // Icon badge (Google Maps jaisa): rang wala gol + andar white icon
         const dot = document.createElement("span");
-        dot.style.cssText = `width:14px;height:14px;border-radius:50%;background:${cat.color || "#111"};border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.45)`;
+        dot.style.cssText = `display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:${cat.color || "#111"};border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.4)`;
+        dot.innerHTML = faSvg(ICONS[cat.icon], 13); // static icon, safe
 
         // Naam ka label sirf tab jab koi category select ho
         if (showLabels) {
@@ -371,7 +396,7 @@ export default function PropertyLocation({ data }) {
           setSelected(p);
         });
 
-        // Label ke saath "bottom" anchor, sirf dot ho to "center"
+        // Label ke saath "bottom" anchor, sirf icon ho to "center"
         const m = new maplibregl.Marker({
           element: el,
           anchor: showLabels ? "bottom" : "center",
@@ -471,7 +496,7 @@ export default function PropertyLocation({ data }) {
 
         destPopupRef.current = new maplibregl.Popup({
           closeOnClick: false,
-          offset: 12,
+          offset: 18,
           maxWidth: "240px",
         })
           .setLngLat(dest.coords)
@@ -547,8 +572,9 @@ export default function PropertyLocation({ data }) {
             >
               <span
                 aria-hidden="true"
-                className="inline-block size-2.5 rounded-full border border-white"
+                className="grid size-5 place-items-center rounded-full"
                 style={{ background: c.color || "#111" }}
+                dangerouslySetInnerHTML={{ __html: faSvg(ICONS[c.icon], 11) }}
               />
               {c.name}
             </button>

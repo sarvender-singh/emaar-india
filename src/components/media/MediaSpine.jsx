@@ -3,6 +3,10 @@
 
 import { useMemo, useState } from "react";
 
+const isExternal = (href) => /^https?:\/\//.test(href);
+const linkProps = (href) =>
+  isExternal(href) ? { target: "_blank", rel: "noopener noreferrer" } : {};
+
 const Arrow = () => (
   <span
     aria-hidden="true"
@@ -58,8 +62,7 @@ function ListRow({ item, tag }) {
     <li className="border-b border-[#11111112]">
       <a
         href={item.href}
-        target="_blank"
-        rel="noopener noreferrer"
+        {...linkProps(item.href)}
         data-testid="media-item"
         className="group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-5 gap-y-4 py-6 sm:grid-cols-[minmax(0,255px)_minmax(0,1fr)_auto] sm:gap-x-[40px] sm:py-8"
       >
@@ -76,7 +79,7 @@ function ListRow({ item, tag }) {
         </div>
 
         <Arrow />
-        <span className="sr-only">(opens in a new tab)</span>
+        {isExternal(item.href) && <span className="sr-only">(opens in a new tab)</span>}
       </a>
     </li>
   );
@@ -87,8 +90,7 @@ function GridCard({ item, tag }) {
     <li>
       <a
         href={item.href}
-        target="_blank"
-        rel="noopener noreferrer"
+        {...linkProps(item.href)}
         data-testid="media-item"
         className="group flex h-full flex-col border border-[#11111112] bg-white transition-shadow duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
       >
@@ -100,15 +102,15 @@ function GridCard({ item, tag }) {
           <Meta item={item} tag={tag} />
           <span className="mt-3 block font-serif text-[19px] font-light leading-[1.35] text-[#111]">{item.title}</span>
         </span>
-        <span className="sr-only">(opens in a new tab)</span>
+        {isExternal(item.href) && <span className="sr-only">(opens in a new tab)</span>}
       </a>
     </li>
   );
 }
 
-export default function MediaSpine({ data }) {
+export default function MediaSpine({ data, initialTab }) {
   const { indexLabel, tabs, pageSize = 6 } = data;
-  const [tabId, setTabId] = useState(tabs[0].id);
+  const [tabId, setTabId] = useState(tabs.find((t) => t.id === initialTab)?.id ?? tabs[0].id);
   const [query, setQuery] = useState("");
   const [view, setView] = useState("list");
   const [shown, setShown] = useState(pageSize);

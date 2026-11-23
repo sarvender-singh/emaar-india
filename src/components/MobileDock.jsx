@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import FooterPreferences from "@/components/privacy/FooterPreferences";
 import { usePathname } from "next/navigation";
 import { DockIcon, SocialIcon, WhatsappIcon } from "@/components/ui/icons";
 import { useEnquiry } from "@/components/EnquiryModal";
@@ -50,19 +51,47 @@ export default function MobileDock({ header, footer }) {
 
   return (
     <>
-      {/* Floating WhatsApp */}
-      {!more && (
-        <a
-          href={contact.whatsapp}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Chat on WhatsApp"
-          data-testid="mobile-whatsapp-fab"
-          className="fixed right-4 z-[55] grid size-[52px] place-items-center rounded-full bg-[#25D366] text-white shadow-xl bottom-[calc(var(--dock-h)+12px+env(safe-area-inset-bottom,0px))] lg:hidden"
-        >
-          <WhatsappIcon size={26} />
-        </a>
-      )}
+     {/* Floating WhatsApp and Call */}
+{!more && (
+  <div
+    role="group"
+    aria-label="Contact Emaar"
+    className="fixed right-4 bottom-[calc(var(--dock-h)+12px+env(safe-area-inset-bottom,0px))] z-[55] flex flex-col items-center gap-3 lg:right-6 lg:bottom-30"
+  >
+    <a
+      href={contact.whatsapp}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat on WhatsApp"
+      data-testid="mobile-whatsapp-fab"
+      className="grid size-12 place-items-center rounded-full bg-[#25D366] text-white shadow-md"
+    >
+      <WhatsappIcon size={25} />
+    </a>
+
+    <a
+      href={contact.phone}
+      aria-label="Call Emaar"
+      data-testid="floating-call-button"
+      className="grid size-12 place-items-center rounded-full border border-black/10 bg-[#faf8f4] text-[#181818] shadow-md"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.71 2.79a2 2 0 0 1-.45 2.11L8.1 9.89a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.89.34 1.83.58 2.79.71A2 2 0 0 1 22 16.92z" />
+      </svg>
+    </a>
+  </div>
+)}
 
       {/* DOCK */}
       <nav
@@ -211,7 +240,7 @@ export default function MobileDock({ header, footer }) {
           </div>
 
           <Link
-            href={footer.bottom.exploreAll.href}
+            href={footer.bottom.exploreAll.href === "/sitemap" ? "/html-sitemap" : footer.bottom.exploreAll.href}
             className="mt-11 flex min-h-14 items-center justify-between border border-white/20 px-4 font-nav text-[11px] font-semibold uppercase tracking-[0.2em] hover:bg-white/10"
           >
             <span>{footer.bottom.exploreAll.label}</span>
@@ -240,6 +269,7 @@ export default function MobileDock({ header, footer }) {
                 {l.label}
               </Link>
             ))}
+            <FooterPreferences onNavigate={() => setMore(false)} />
             <p className="m-0 w-full text-xs text-white/40">{footer.bottom.copyright}</p>
           </div>
         </div>

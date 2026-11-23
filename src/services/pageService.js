@@ -11,11 +11,14 @@ import { investor } from "@/data/investor";
 import { media } from "@/data/media";
 import { compliance } from "@/data/compliance";
 import { blog } from "@/data/blog";
+import { careers } from "@/data/careers";
+import { privacyPolicy } from "@/data/privacyPolicy";
+import { terms } from "@/data/terms";
 
 
 const mock = {
   header, footer, home, about, contact, faq,
-  foundation, awards, environmentalPolicy, investor, media, compliance, blog,
+  foundation, awards, environmentalPolicy, investor, media, compliance, blog, careers, privacyPolicy,terms,
 };
 
 export async function getPage(slug, { revalidate = 60 } = {}) {

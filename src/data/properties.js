@@ -98,7 +98,8 @@ export const properties = [
         { icon: "party", label: "Club Party Lawn" },
       ],
     },
-    location: {
+   // properties.js ke andar sirf "location: { ... }" wala hissa isse replace karo
+location: {
   eyebrow: "Location",
   mapTitle: "Nearby places around Emaar Serenity Hills",
   openUrl: "https://www.google.com/maps/search/?api=1&query=Emaar+Serenity+Hills+Gurugram",
@@ -106,18 +107,18 @@ export const properties = [
   origin: { name: "Emaar Serenity Hills", coords: [76.9484103, 28.3992572] }, // [lng, lat]
   categories: [
     {
-      name: "Schools", color: "#2563eb",
+      name: "Schools", icon: "school", color: "#2563eb",
       osm: '["amenity"="school"]', radius: 5000,
       places: [
         { name: "Delhi Public School", coords: [76.9597526, 28.4063222] },
         { name: "ODM International School", coords: [77.0457253, 28.4110156], query: "ODM International School Gurugram" },
-        { name: "RPS International School",coords: [77.0380005, 28.4110388], query: "RPS International School Sector 92 Gurugram" },
+        { name: "RPS International School", coords: [77.0380005, 28.4110388], query: "RPS International School Sector 92 Gurugram" },
         { name: "Shishu Kalyan School", query: "Shishu Kalyan School Gurugram" },
         { name: "The i-School", query: "The i-School Sector 67 Gurugram" },
       ],
     },
     {
-      name: "Hospitals", color: "#dc2626",
+      name: "Hospitals", icon: "hospital", color: "#dc2626",
       osm: '["amenity"="hospital"]', radius: 8000,
       places: [
         { name: "Apollo Cradle", coords: [76.9530944, 28.3926184] },
@@ -128,7 +129,7 @@ export const properties = [
       ],
     },
     {
-      name: "Hotels", color: "#16a34a",
+      name: "Hotels", icon: "hotel", color: "#16a34a",
       osm: '["tourism"="hotel"]', radius: 8000,
       places: [
         { name: "Hyatt Regency Gurgaon", coords: [76.9769075, 28.3919521] },
@@ -139,12 +140,12 @@ export const properties = [
       ],
     },
     {
-      name: "Malls", color: "#9333ea",
+      name: "Malls", icon: "mall", color: "#9333ea",
       osm: '["shop"="mall"]', radius: 8000,
       places: [{ name: "Iris Broadway", coords: [76.9454175, 28.4035483] }],
     },
     {
-      name: "Connectivity", color: "#111111",
+      name: "Connectivity", icon: "road", color: "#111111",
       places: [{ name: "Cloverleaf (Dwarka Expy / NH-48)", coords: [76.9900132, 28.4069395] }],
     },
   ],

@@ -325,4 +325,9 @@ export const home = {
     video: { src: "/videos/emaar-india-journey.mp4", poster: "/images/converse/poster.jpg", label: "Emaar India building at night" },
     cta: { label: "Chat with us", href: "https://wa.me/911234567890", external: true, icon: "whatsapp" },
   },
+  loader: {
+  image: "/images/hero-poster.png", // abhi placeholder, baad me video ka first frame
+  alt: "",
+  tagline: "130,900 Homes. And counting.",
+},
 };
