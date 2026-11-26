@@ -1,17 +1,26 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
 import { submitEnquiry } from "@/services/enquiryService";
 
 const EnquiryContext = createContext({ openEnquiry: () => {} });
+
 export const useEnquiry = () => useContext(EnquiryContext);
 
-const CODES = [
-  { code: "+91", flag: "🇮🇳", name: "India" },
-  { code: "+971", flag: "🇦🇪", name: "UAE" },
-  { code: "+1", flag: "🇺🇸", name: "USA" },
-  { code: "+44", flag: "🇬🇧", name: "UK" },
-  { code: "+65", flag: "🇸🇬", name: "Singapore" },
+const COUNTRIES = [
+  { iso: "IN", code: "+91", name: "India" },
+  { iso: "AE", code: "+971", name: "UAE" },
+  { iso: "US", code: "+1", name: "USA" },
+  { iso: "GB", code: "+44", name: "UK" },
+  { iso: "SG", code: "+65", name: "Singapore" },
 ];
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -22,18 +31,29 @@ const STEPS = [
   "Viewings and unit selection, in person or remotely.",
 ];
 
-const fieldCls =
-  "w-full border-0 border-b border-white/25 bg-transparent px-0 py-3 text-[15px] text-white placeholder:text-white/35 focus:border-white focus:outline-none";
-const labelCls = "mb-1 block text-[10px] font-semibold uppercase tracking-[0.22em] text-white/60";
-const errCls = "mt-1 block min-h-4 text-xs text-[#ff8a80]";
+const labelCls =
+  "mb-2 block font-nav text-[9px] font-semibold uppercase leading-[1.4] tracking-[0.22em] text-[#746a5a]";
+
+const controlCls =
+  "h-[46px] rounded-[2px] border border-[#96938e] bg-transparent font-sans text-base font-normal text-[#151515] focus:border-[#181818] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#181818] sm:text-[14px]";
+
+const inputCls =
+  `${controlCls} block w-full min-w-0 px-[13px] placeholder:text-[#737174] aria-invalid:border-[#a33228]`;
+
+const errorCls = "mt-1 block min-h-4 text-xs leading-4 text-[#a33228]";
+
+const submitCls =
+  "flex min-h-[46px] w-full items-center justify-center rounded-[2px] bg-[#111113] px-4 py-3 font-nav text-[11.5px] font-semibold uppercase tracking-[0.18em] text-white transition-colors hover:bg-[#303032] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#181818] disabled:cursor-wait disabled:opacity-60";
 
 export function EnquiryProvider({ children }) {
   const [open, setOpen] = useState(false);
   const [source, setSource] = useState("");
+
   const openEnquiry = useCallback((src = "") => {
     setSource(src);
     setOpen(true);
   }, []);
+
   const close = useCallback(() => setOpen(false), []);
 
   return (
@@ -46,88 +66,144 @@ export function EnquiryProvider({ children }) {
 
 export function EnquiryButton({ source, children, ...props }) {
   const { openEnquiry } = useEnquiry();
+
   return (
-    <button type="button" aria-haspopup="dialog" onClick={() => openEnquiry(source)} {...props}>
+    <button
+      type="button"
+      aria-haspopup="dialog"
+      onClick={() => openEnquiry(source)}
+      {...props}
+    >
       {children}
     </button>
   );
 }
 
 function EnquiryModal({ source, onClose }) {
-  const [status, setStatus] = useState("idle"); // idle | sending | sent | error
+  const [status, setStatus] = useState("idle");
   const [errors, setErrors] = useState({});
+
   const cardRef = useRef(null);
   const nameRef = useRef(null);
+  const doneRef = useRef(null);
+  const sendingRef = useRef(false);
 
-  // focus trap + Escape + scroll lock + focus restore
   useEffect(() => {
-    const prev = document.activeElement;
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    nameRef.current?.focus();
+    const previousFocus = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
 
-    const onKey = (e) => {
-      if (e.key === "Escape") return onClose();
-      if (e.key !== "Tab" || !cardRef.current) return;
-      const els = cardRef.current.querySelectorAll(
-        'a[href], button:not([disabled]), input:not([type="hidden"]), select'
+    document.body.style.overflow = "hidden";
+    nameRef.current?.focus({ preventScroll: true });
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+        return;
+      }
+
+      if (event.key !== "Tab" || !cardRef.current) return;
+
+      const controls = cardRef.current.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled])'
       );
-      if (!els.length) return;
-      const first = els[0];
-      const last = els[els.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
+
+      if (!controls.length) return;
+
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+      const active = document.activeElement;
+
+      if (!cardRef.current.contains(active)) {
+        event.preventDefault();
+        (event.shiftKey ? last : first).focus();
+      } else if (event.shiftKey && active === first) {
+        event.preventDefault();
         last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
         first.focus();
       }
     };
-    document.addEventListener("keydown", onKey);
+
+    document.addEventListener("keydown", handleKeyDown);
+
     return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prevOverflow;
-      prev?.focus?.();
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+      previousFocus?.focus?.({ preventScroll: true });
     };
   }, [onClose]);
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const name = String(fd.get("name") ?? "").trim();
-    const email = String(fd.get("email") ?? "").trim();
-    const phone = String(fd.get("phone") ?? "").replace(/\D/g, "");
+  useEffect(() => {
+    if (status === "sent") doneRef.current?.focus();
+  }, [status]);
 
-    const next = {};
-    if (name.length < 2) next.name = "Please enter your full name.";
-    if (!EMAIL.test(email)) next.email = "Please enter a valid email address.";
-    if (phone.length < 7 || phone.length > 12) next.phone = "Please enter a valid phone number.";
-    setErrors(next);
-    if (Object.keys(next).length) return;
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    if (sendingRef.current) return;
 
+    const form = event.currentTarget;
+    const data = new FormData(form);
+
+    const name = String(data.get("name") ?? "").trim();
+    const email = String(data.get("email") ?? "").trim();
+    const phone = String(data.get("phone") ?? "").replace(/\D/g, "");
+    const countryCode = String(data.get("countryCode") ?? "+91");
+
+    const nextErrors = {};
+
+    if (name.length < 2) {
+      nextErrors.name = "Please enter your full name.";
+    }
+
+    if (!EMAIL.test(email)) {
+      nextErrors.email = "Please enter a valid email address.";
+    }
+
+    if (phone.length < 7 || phone.length > 12) {
+      nextErrors.phone = "Please enter a valid phone number.";
+    }
+
+    setErrors(nextErrors);
+
+    const firstInvalid = Object.keys(nextErrors)[0];
+
+    if (firstInvalid) {
+      form.elements.namedItem(firstInvalid)?.focus();
+      return;
+    }
+
+    sendingRef.current = true;
     setStatus("sending");
+
     try {
       await submitEnquiry({
         name,
         email,
         phone,
-        countryCode: fd.get("countryCode"),
-        keepUpdated: fd.get("keepUpdated") === "on",
+        countryCode,
+        keepUpdated: data.get("keepUpdated") === "on",
         source,
       });
+
       setStatus("sent");
     } catch {
       setStatus("error");
+    } finally {
+      sendingRef.current = false;
     }
   };
 
   return (
-    <div className="fixed inset-0 z-[90] flex items-end justify-center sm:items-center" data-testid="enquire-modal">
+    <div
+      data-testid="enquire-modal"
+      className="fixed inset-0 z-[90] flex items-center justify-center p-3"
+    >
       <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
-        onClick={onClose}
-        data-testid="enquire-modal-scrim"
         aria-hidden="true"
+        data-testid="enquire-modal-scrim"
+        onClick={onClose}
+        className="absolute inset-0 bg-[#080e0d]/75 backdrop-blur-[6px]"
       />
 
       <div
@@ -135,32 +211,56 @@ function EnquiryModal({ source, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="enquiry-title"
-        className="relative max-h-[92svh] w-full overflow-y-auto bg-[#12110f] p-6 text-white shadow-2xl sm:max-w-[480px] sm:p-9"
+        className="relative max-h-[calc(100dvh-24px)] w-full max-w-[488px] overflow-y-auto overscroll-contain rounded-[2px] bg-[#faf9f6] px-5 py-6 font-sans font-normal text-[#141414] shadow-2xl [color-scheme:light] sm:p-[42px]"
       >
         {status === "sent" ? (
           <div data-testid="enquire-modal-sent">
-            <div className="mb-5 flex items-center gap-3">
-              <span className="grid size-9 place-items-center rounded-full border border-white/30" aria-hidden="true">
-                <svg viewBox="0 0 16 16" width="14" height="14" fill="none">
-                  <path d="M3 8.5l3.4 3.4L13 4.6" stroke="currentColor" strokeWidth="1.6" />
+            <div className="mb-4 flex items-center gap-3">
+              <span
+                aria-hidden="true"
+                className="grid size-9 shrink-0 place-items-center rounded-full border border-[#c8c4bc]"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M3 8.5l3.4 3.4L13 4.6"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                  />
                 </svg>
               </span>
-              <h2 id="enquiry-title" className="font-serif text-3xl">Thank you.</h2>
+
+              <h2
+                id="enquiry-title"
+                className="m-0 font-serif text-[30px] font-normal leading-tight"
+              >
+                Thank you.
+              </h2>
             </div>
-            <p className="mb-6 text-sm text-white/70">Your enquiry has been received. Here is what happens next:</p>
+
+            <p className="mb-6 text-sm leading-relaxed text-[#655d50]">
+              Your enquiry has been received. Here is what happens next:
+            </p>
+
             <ol className="mb-8 space-y-4">
-              {STEPS.map((s, i) => (
-                <li key={s} className="flex gap-4 text-sm text-white/85">
-                  <span className="font-nav text-xs tracking-widest text-white/50">0{i + 1}</span>
-                  <span>{s}</span>
+              {STEPS.map((step, index) => (
+                <li
+                  key={step}
+                  className="flex gap-4 text-sm leading-relaxed text-[#514c44]"
+                >
+                  <span className="font-nav text-xs tracking-widest text-[#746a5a]">
+                    0{index + 1}
+                  </span>
+                  <span>{step}</span>
                 </li>
               ))}
             </ol>
+
             <button
+              ref={doneRef}
               type="button"
               onClick={onClose}
               data-testid="enquire-modal-done"
-              className="w-full bg-white py-4 text-xs font-bold uppercase tracking-[0.2em] text-black"
+              className={submitCls}
             >
               Done
             </button>
@@ -169,109 +269,177 @@ function EnquiryModal({ source, onClose }) {
           <>
             <div className="mb-6 flex items-start justify-between gap-4">
               <div>
-                <h2 id="enquiry-title" className="font-serif text-3xl" data-testid="enquire-modal-title">
+                <h2
+                  id="enquiry-title"
+                  data-testid="enquire-modal-title"
+                  className="m-0 font-serif text-[28px] font-normal leading-[1.12] text-[#121212] sm:text-[32px]"
+                >
                   Get in touch
                 </h2>
-                <p className="mt-1 text-sm text-white/60">Tell us how to reach you.</p>
+
+                <p className="mb-0 mt-2.5 text-[14px] font-normal leading-[1.5] text-[#655d50]">
+                  Tell us how to reach you.
+                </p>
               </div>
+
               <button
                 type="button"
-                onClick={onClose}
                 aria-label="Close enquiry"
+                onClick={onClose}
                 data-testid="enquire-modal-close"
-                className="grid size-10 flex-none place-items-center border border-white/20 hover:bg-white/10"
+                className="grid size-10 shrink-0 place-items-center rounded-full border border-[#ccc8c1] bg-transparent text-[#151515] transition-colors hover:border-[#817c74] hover:bg-[#f0eeea] focus-visible:outline-2 focus-visible:outline-offset-2"
               >
-                <svg viewBox="0 0 14 14" width="12" height="12" fill="none" aria-hidden="true">
-                  <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth="1.4" />
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M2 2l12 12M14 2L2 14"
+                    stroke="currentColor"
+                    strokeWidth="1.4"
+                  />
                 </svg>
               </button>
             </div>
 
-            <form onSubmit={onSubmit} noValidate data-testid="enquire-modal-form" className="space-y-3">
+            <form
+              onSubmit={onSubmit}
+              noValidate
+              data-testid="enquire-modal-form"
+              className="grid gap-[15px]"
+            >
               <div>
-                <label htmlFor="enq-name" className={labelCls}>Full name</label>
+                <label htmlFor="enq-name" className={labelCls}>
+                  Full name
+                </label>
                 <input
                   ref={nameRef}
                   id="enq-name"
                   name="name"
                   type="text"
+                  required
                   autoComplete="name"
                   placeholder="Your full name"
-                  aria-invalid={!!errors.name}
+                  aria-invalid={Boolean(errors.name)}
                   aria-describedby="enq-name-err"
                   data-testid="enquire-modal-name-input"
-                  className={fieldCls}
+                  className={inputCls}
                 />
-                <span id="enq-name-err" className={errCls} role="alert">{errors.name}</span>
+                <span id="enq-name-err" role="alert" className={errorCls}>
+                  {errors.name}
+                </span>
               </div>
 
               <div>
-                <label htmlFor="enq-email" className={labelCls}>Email address</label>
+                <label htmlFor="enq-email" className={labelCls}>
+                  Email address
+                </label>
                 <input
                   id="enq-email"
                   name="email"
                   type="email"
+                  required
                   autoComplete="email"
                   placeholder="name@example.com"
-                  aria-invalid={!!errors.email}
+                  aria-invalid={Boolean(errors.email)}
                   aria-describedby="enq-email-err"
                   data-testid="enquire-modal-email-input"
-                  className={fieldCls}
+                  className={inputCls}
                 />
-                <span id="enq-email-err" className={errCls} role="alert">{errors.email}</span>
+                <span id="enq-email-err" role="alert" className={errorCls}>
+                  {errors.email}
+                </span>
               </div>
 
               <div>
-                <label htmlFor="enq-phone" className={labelCls}>Phone number</label>
-                <div className="flex gap-3">
-                  <select
-                    name="countryCode"
-                    aria-label="Country dialling code"
-                    defaultValue="+91"
-                    data-testid="enquire-modal-country-select"
-                    className="w-[96px] flex-none border-0 border-b border-white/25 bg-transparent py-3 text-[15px] text-white focus:border-white focus:outline-none"
-                  >
-                    {CODES.map((c) => (
-                      <option key={c.code} value={c.code} className="bg-[#12110f]">
-                        {c.flag} {c.code}
-                      </option>
-                    ))}
-                  </select>
+                <label htmlFor="enq-phone" className={labelCls}>
+                  Phone number
+                </label>
+
+                <div className="flex items-center gap-2.5">
+                  <div className="relative w-[96px] shrink-0">
+                    <select
+                      name="countryCode"
+                      aria-label="Country dialling code"
+                      defaultValue="+91"
+                      data-testid="enquire-modal-country-select"
+                      className={`${controlCls} w-full cursor-pointer appearance-none pl-3 pr-7`}
+                    >
+                      {COUNTRIES.map((country) => (
+                        <option
+                          key={country.iso}
+                          value={country.code}
+                          aria-label={`${country.name} ${country.code}`}
+                        >
+                          {country.iso} {country.code}
+                        </option>
+                      ))}
+                    </select>
+
+                    <svg
+                      aria-hidden="true"
+                      width="10"
+                      height="6"
+                      viewBox="0 0 10 6"
+                      fill="none"
+                      className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#655d50]"
+                    >
+                      <path
+                        d="m1 1 4 4 4-4"
+                        stroke="currentColor"
+                        strokeWidth="1.3"
+                      />
+                    </svg>
+                  </div>
+
                   <input
                     id="enq-phone"
                     name="phone"
                     type="tel"
+                    required
                     autoComplete="tel-national"
                     placeholder="98765 43210"
-                    aria-invalid={!!errors.phone}
+                    aria-invalid={Boolean(errors.phone)}
                     aria-describedby="enq-phone-err"
                     data-testid="enquire-modal-phone-input"
-                    className={fieldCls}
+                    className={`${inputCls} flex-1`}
                   />
                 </div>
-                <span id="enq-phone-err" className={errCls} role="alert">{errors.phone}</span>
+
+                <span id="enq-phone-err" role="alert" className={errorCls}>
+                  {errors.phone}
+                </span>
               </div>
 
-              <label className="flex cursor-pointer items-start gap-3 text-sm text-white/75">
+              <label className="flex cursor-pointer items-center gap-3 text-[14px] font-normal leading-[1.5] text-[#655d50]">
                 <input
                   type="checkbox"
                   name="keepUpdated"
                   data-testid="enquire-modal-keep-updated-checkbox"
-                  className="mt-0.5 size-4 accent-white"
+                  className="size-[15px] shrink-0 accent-[#111113]"
                 />
                 Keep me updated on launches and news
               </label>
 
-              <p className="text-xs text-white/50">
-                By submitting, you agree to our{" "}
-                <a href="/privacy-policy" target="_blank" rel="noreferrer" className="underline" data-testid="enquire-modal-privacy-link">
+              <p className="m-0 text-[12px] leading-[1.5] text-[#706d70]">
+                By submitting, you agree to Emaar&apos;s{" "}
+                <a
+                  href="/privacy-policy"
+                  target="_blank"
+                  rel="noreferrer"
+                  data-testid="enquire-modal-privacy-link"
+                  className="text-[#514e50] underline underline-offset-2"
+                >
                   privacy policy
                 </a>
                 .
               </p>
 
               {status === "error" && (
-                <p role="alert" className="text-sm text-[#ff8a80]">
+                <p role="alert" className="m-0 text-sm text-[#a33228]">
                   Something went wrong. Please try again.
                 </p>
               )}
@@ -280,7 +448,7 @@ function EnquiryModal({ source, onClose }) {
                 type="submit"
                 disabled={status === "sending"}
                 data-testid="enquire-modal-submit"
-                className="w-full bg-white py-4 text-xs font-bold uppercase tracking-[0.2em] text-black transition-opacity disabled:opacity-60"
+                className={submitCls}
               >
                 {status === "sending" ? "Sending..." : "Submit"}
               </button>

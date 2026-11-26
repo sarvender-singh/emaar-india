@@ -61,94 +61,132 @@ export const home = {
     ],
   },
 
-  launches: {
-  kicker: "New Launches",
-  title: "Discover What’s Taking Shape",
-  lede: "Explore Emaar’s latest developments across India, each shaped by its setting, design vision and approach to contemporary living.",
-  cue: "Scroll to explore",
-  exploreLabel: "Explore",
- items: [
-  { slug: "serenity-hills", name: "Serenity Hills", city: "Gurugram", type: "Residential", config: "3&4 BHK",
-    image: "/images/launches/serenity-hills.png",        // poster
-    video: "/videos/serenity-hills.mp4",
-    href: "/properties/emaar-serenity-hills" },
-  { slug: "elara", name: "Elara", city: "Lucknow", type: "Residential", config: "3&4 BHK",
-    image: "/images/launches/elara.png",
-    video: "/videos/elara.mp4",
-    href: "/properties/elara" },
-  { slug: "casa-venero", name: "Casa Venero", city: "Alibag", type: "Residential", config: "Villas",
-    image: "/images/launches/casa-venero.png",
-    video: "/videos/casa-venero.mp4",
-    href: "/properties/casa-venero" },
-    {
-  slug: "elite-oasis",
-  name: "Elite Oasis",
-  city: "Lucknow",
-  type: "Residential",
-  config: "3&4 BHK",
-  image: "/images/launches/elite-oasis.png",
-  video: "/videos/elite-oasis.mp4",
-  href: "/properties/elite-oasis"
-},
-],
-},
-  developments: {
-    kicker: "Landmark Developments",
-    title: "Where Life Finds Its Place",
-    lede: "From distinctive residences to vibrant destinations, each development is part of a wider vision for places that endure and communities that thrive.",
-    allLabel: "View all developments",
-    allHref: "/projects/residential/ongoing",
+   launches: {
+    kicker: "New Launches",
+    title: "Unveil the Latest in Exceptional Living",
+    lede: "Explore the latest residences taking shape across Emaar's masterplans, each responding to the character, light and landscape of its setting. View every release, its location and starting price.",
+    cue: "Scroll to explore",
     exploreLabel: "Explore",
+    registerLabel: "Register",
+
     items: [
-  {
-    slug: "serenity-hills",
-    name: "Serenity Hills",
-    city: "Gurugram",
-    type: "Residential / 3&4 BHK",
-    image: "/images/developments/Serenity-hills.webp",
-    href: "/properties/emaar-serenity-hills"
+      {
+        slug: "serenity-hills",
+        name: "Serenity Hills",
+        city: "Gurugram",
+        type: "Residential",
+        config: "3 & 4 BHK",
+        priceFrom: "XXXX",
+        image: "/images/launches/serenity-hills.png",
+        video: "/videos/serenity-hills.mp4",
+        href: "/properties/emaar-serenity-hills",
+      },
+      {
+        slug: "elara",
+        name: "Elara",
+        city: "Lucknow",
+        type: "Residential",
+        config: "3 & 4 BHK",
+        priceFrom: "XXXX",
+        image: "/images/launches/elara.png",
+        video: "/videos/elara.mp4",
+        href: "/properties/elara",
+      },
+      {
+        slug: "urban-ascent",
+        name: "Urban Ascent",
+        city: "Gurugram",
+        type: "Residential",
+        config: "3 & 4 BHK",
+        priceFrom: "XXXX",
+        image: "/images/developments/Urban-Ascent.webp",
+        href: "/properties/urban-ascent",
+      },
+      {
+        slug: "emaar-business-square",
+        name: "Emaar Business Square",
+        city: "Gurugram",
+        type: "Commercial",
+        priceFrom: "XXXX",
+        image: "/images/developments/Business-square.webp",
+        href: "/properties/emaar-business-square",
+      },
+      {
+        slug: "india-business-centre",
+        name: "Emaar India Business Centre",
+        city: "Gurugram",
+        type: "Commercial",
+        priceFrom: "XXXX",
+        image: "/images/developments/Business-centre.webp",
+        href: "/properties/india-business-centre",
+      },
+    ],
   },
-  {
-    slug: "elara",
-    name: "ELARA",
-    city: "Lucknow",
-    type: "Residential / 3&4 BHK",
-    image: "/images/developments/Elara.webp",
-    href: "/properties/elara"
-  },
-  {
-    slug: "emaar-business-square",
-    name: "Emaar Business Square",
-    city: "Gurugram",
-    type: "Commercial",
-    image: "/images/developments/Business-square.webp",
-    href: "/properties/emaar-business-square"
-  },
-  {
-    slug: "india-business-centre",
-    name: "India Business Centre",
-    city: "Gurugram",
-    type: "Commercial",
-    image: "/images/developments/Business-centre.webp",
-    href: "/properties/india-business-centre"
-  },
-  {
-    slug: "casa-venero",
-    name: "Casa Venero",
-    city: "Alibag",
-    type: "Residential / Villas",
-    image: "/images/developments/Casa-Venero.webp",
-    href: "/properties/casa-venero"
-  },
-  {
-    slug: "elite-oasis",
-    name: "Elite Oasis",
-    city: "Lucknow",
-    type: "Residential / 3&4 BHK",
-    image: "/images/developments/elite-oasis.webp",
-    href: "/properties/elite-oasis"
-  }
-],
+   developments: {
+    kicker: "Newly Launched",
+    title: "Explore All Launches",
+    lede: "Explore our latest launches across India, their locations and starting prices.",
+    allLabel: "View all launches",
+    allHref: "/latest-launches",
+    exploreLabel: "Explore",
+    registerLabel: "Register",
+
+    items: [
+      {
+        slug: "serenity-hills",
+        name: "Serenity Hills",
+        city: "Gurugram",
+        type: "Residential / 3&4 BHK",
+        priceFrom: "XXXX",
+        image: "/images/developments/Serenity-hills.webp",
+        href: "/properties/emaar-serenity-hills",
+      },
+      {
+        slug: "elara",
+        name: "ELARA",
+        city: "Lucknow",
+        type: "Residential / 3&4 BHK",
+        priceFrom: "XXXX",
+        image: "/images/developments/Elara.webp",
+        href: "/properties/elara",
+      },
+      {
+        slug: "emaar-business-square",
+        name: "Emaar Business Square",
+        city: "Gurugram",
+        type: "Commercial",
+        priceFrom: "XXXX",
+        image: "/images/developments/Business-square.webp",
+        href: "/properties/emaar-business-square",
+      },
+      {
+        slug: "india-business-centre",
+        name: "India Business Centre",
+        city: "Gurugram",
+        type: "Commercial",
+        priceFrom: "XXXX",
+        image: "/images/developments/Business-centre.webp",
+        href: "/properties/india-business-centre",
+      },
+      {
+        slug: "casa-venero",
+        name: "Casa Venero",
+        city: "Alibag",
+        type: "Residential / Villas",
+        priceFrom: "XXXX",
+        image: "/images/developments/Casa-Venero.webp",
+        href: "/properties/casa-venero",
+      },
+      {
+        slug: "elite-oasis",
+        name: "Elite Oasis",
+        city: "Lucknow",
+        type: "Residential / 3&4 BHK",
+        priceFrom: "XXXX",
+        image: "/images/developments/elite-oasis.webp",
+        href: "/properties/elite-oasis",
+      },
+    ],
   },
   underDevelopment: {
   kicker: "Projects under development",
@@ -209,7 +247,7 @@ export const home = {
 ],
 },
     communitiesIntro: {
-    kicker: "Emaar Communities",
+    kicker: "Emaar Residential",
     title: "A World Designed Around Living",
     lede: "Thoughtfully planned and shaped by their surroundings, Emaar communities bring together architecture, open spaces and meaningful everyday experiences.",
     cue: "Scroll to explore",
@@ -217,7 +255,7 @@ export const home = {
   },
     communities: {
     id: "communities",
-    allLabel: "View all communities",
+    allLabel: "View all Residential",
     allHref: "/master-developments",
     discoverLabel: "Discover More",
     items: [
@@ -268,8 +306,10 @@ export const home = {
 },
     ],
   },
+
+
     propertiesIntro: {
-    kicker: "Emaar Properties",
+    kicker: "Emaar Business",
     title: "More to Experience. More to Discover.",
     lede: "From distinctive residences to commercial destinations, Emaar brings together places designed for living, working and connecting.",
     cue: "Scroll to explore",
@@ -321,13 +361,34 @@ export const home = {
     converse: {
     id: "converse",
     title: "The journey begins with a conversation",
-    lede: "Whether you're exploring a new home, a commercial opportunity or a potential partnership, connect with our team to take the next step.",
-    video: { src: "/videos/emaar-india-journey.mp4", poster: "/images/converse/poster.jpg", label: "Emaar India building at night" },
+lede: "Explore a home or investment, begin a media conversation, propose a brand partnership or enquire about becoming a supplier. Our team will connect you with the people best placed to help.",    video: { src: "/videos/emaar-india-journey.mp4", poster: "/images/converse/poster.jpg", label: "Emaar India building at night" },
     cta: { label: "Chat with us", href: "https://wa.me/911234567890", external: true, icon: "whatsapp" },
   },
   loader: {
-  image: "/images/hero-poster.png", // abhi placeholder, baad me video ka first frame
+  image: "/images/hero-poster.webp", // abhi placeholder, baad me video ka first frame
   alt: "",
   tagline: "130,900 Homes. And counting.",
 },
+items: [
+  {
+    title: "Emaar Broker Awards",
+    by: "Find Your Happy | 2019",
+    image: "/images/awards/awards-image1-320x415.jpg",
+  },
+  {
+    title: "Company of the Year",
+    by: "Maiden Property Management | 2018",
+    image: "/images/awards/awards-image2-320x415.jpg",
+  },
+  {
+    title: "Middle East's Leading Tourist Attraction",
+    by: "World Travel Awards™ | 2017",
+    image: "/images/awards/awards-burj-320x415.jpeg",
+  },
+  {
+    title: "The Best Hotel Residences in the Middle East",
+    by: "Haute Grandeur Global Awards | 2016",
+    image: "/images/awards/5.ADDMH-Residence-Banner-1920x535_tcm113-71341-320x415.jpg",
+  },
+],
 };

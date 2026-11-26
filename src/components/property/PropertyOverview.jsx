@@ -1,5 +1,9 @@
 import SectionEyebrow from "./SectionEyebrow";
 
+const LABEL_CLASS =
+  "m-0 font-nav text-[11px] font-semibold uppercase leading-[1.4] " +
+  "tracking-[0.17em] text-[#756b59]";
+
 const ICONS = {
   diamond: <path d="M12 3 20.4 12 12 21 3.6 12z" />,
   building: (
@@ -12,62 +16,140 @@ const ICONS = {
   ),
 };
 
-const Icon = ({ name }) => (
-  <svg
-    viewBox="0 0 24 24"
-    width="20"
-    height="20"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.1"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-    className="flex-none text-[#777675]"
-  >
-    {ICONS[name] ?? ICONS.diamond}
-  </svg>
-);
+function FactIcon({ name }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="20"
+      height="20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.1"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="shrink-0 text-[#595854]"
+    >
+      {ICONS[name] ?? ICONS.diamond}
+    </svg>
+  );
+}
 
 export default function PropertyOverview({ data }) {
-  const { eyebrow, title, lede, keyFactsLabel, keyFacts = [] } = data;
+  const {
+    eyebrow,
+    title,
+    lede,
+    summary,
+    keyFactsLabel,
+    keyFacts = [],
+  } = data;
+
+  const priceFrom = summary?.priceFrom;
+  const details = [
+    { label: "Category", value: summary?.category },
+    { label: "Type", value: summary?.type },
+  ].filter((detail) => detail.value);
+
+  const hasSummary = Boolean(priceFrom || details.length);
 
   return (
     <section
       id="overview"
       aria-labelledby="overview-title"
       data-testid="property-overview"
-      className="bg-[#F6F2EA] px-[clamp(20px,4vw,64px)] pb-6 md:pb-16 pt-4 text-[#0e1f3a]"
+      className="bg-[#F6F2EA] px-[clamp(20px,4vw,80px)] pb-10 pt-4 text-[#151515] md:pb-16"
     >
       <SectionEyebrow>{eyebrow}</SectionEyebrow>
 
-      <h2
-        id="overview-title"
-        className="mb-0 mt-6 mt-md-8 max-w-[1100px] font-serif text-[28px] font-light leading-[1.15] sm:text-[40px] lg:text-[40px] text-[#111112]"
+      <div
+        className={[
+          "mt-6 grid items-start gap-y-8",
+          hasSummary &&
+            "lg:grid-cols-[minmax(0,1.08fr)_minmax(0,1fr)] lg:gap-x-[4vw]",
+        ]
+          .filter(Boolean)
+          .join(" ")}
       >
-        {title}
-      </h2>
+        <div className="min-w-0">
+          <h2
+            id="overview-title"
+            className="m-0 max-w-[1100px] font-serif text-[30px] font-normal leading-[1.1] text-[#111112] sm:text-[38px] lg:text-[clamp(40px,3.1vw,52px)]"
+          >
+            {title}
+          </h2>
 
-      <p className="mb-0 mt-7 max-w-[770px] text-[16px] leading-[1.75] text-[#0A0A0A] sm:text-[16px]">{lede}</p>
-
-      {keyFacts.length > 0 && (
-        <div className="mt-8 max-w-[650px]">
-          <p className="m-0 mb-3 font-nav text-[10px] font-semibold uppercase tracking-[1.12px] text-[#6F6553]/60">
-            {keyFactsLabel}
+          <p className="mb-0 mt-5 max-w-[770px] font-sans text-[16px] font-normal leading-[1.72] text-[#5c5346] sm:mt-6 lg:text-[clamp(16px,1.12vw,19px)]">
+            {lede}
           </p>
-          <ul data-testid="property-key-facts" className="m-0 list-none border-t border-[#D5D2CB] p-0">
-            {keyFacts.map((f) => (
-              <li
-                key={f.text}
-                className="flex items-center gap-5 border-b border-[#D5D2CB] py-[12px] font-serif text-[14px] text-[#091B36]"
-              >
-                <Icon name={f.icon} />
-                {f.text}
-              </li>
-            ))}
-          </ul>
         </div>
-      )}
+
+        {hasSummary && (
+          <div
+            data-testid="property-summary"
+            className={[
+              "min-w-0 rounded-[2px] border border-[#dfddd7] bg-[#fdfcfb]",
+              "p-6 sm:p-8 lg:p-[clamp(30px,2.6vw,50px)]",
+              "lg:sticky lg:top-[calc(var(--hdr-h,80px)_+_20px)] lg:self-start",
+              "lg:col-start-2 lg:row-start-1",
+              keyFacts.length > 0 && "lg:row-span-2",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+          >
+            {priceFrom && (
+              <dl className="m-0">
+                <dt className={LABEL_CLASS}>Prices from</dt>
+                <dd className="mb-0 ms-0 mt-3 break-words font-serif text-[36px] font-normal leading-[1.1] text-[#111112] sm:text-[42px] lg:text-[clamp(42px,3.1vw,56px)]">
+                  {priceFrom}
+                </dd>
+              </dl>
+            )}
+
+            {details.length > 0 && (
+              <dl
+                className={[
+                  "m-0 grid gap-x-5 gap-y-4",
+                  details.length > 1 && "grid-cols-2",
+                  priceFrom && "mt-6 border-t border-[#dedbd5] pt-6",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+              >
+                {details.map(({ label, value }) => (
+                  <div key={label} className="min-w-0">
+                    <dt className={LABEL_CLASS}>{label}</dt>
+                    <dd className="mb-0 ms-0 mt-2 break-words font-serif text-[21px] font-normal leading-[1.24] text-[#171717] sm:text-[24px] lg:text-[clamp(23px,1.65vw,30px)]">
+                      {value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+          </div>
+        )}
+
+        {keyFacts.length > 0 && (
+          <div className="w-full min-w-0 max-w-[770px] lg:col-start-1">
+            <p className={`${LABEL_CLASS} mb-3`}>{keyFactsLabel}</p>
+
+            <ul
+              data-testid="property-key-facts"
+              className="m-0 list-none border-t border-[#d5d2cb] p-0"
+            >
+              {keyFacts.map((fact) => (
+                <li
+                  key={fact.text}
+                  className="flex items-center gap-4 border-b border-[#d5d2cb] py-4 font-serif text-[17px] font-normal leading-[1.35] text-[#181818] sm:gap-5 sm:text-[19px]"
+                >
+                  <FactIcon name={fact.icon} />
+                  <span>{fact.text}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
     </section>
   );
 }

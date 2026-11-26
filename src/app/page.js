@@ -11,7 +11,7 @@ import LegacyStats from "@/components/home/LegacyStats";
 import PressRail from "@/components/home/PressRail";
 import ConverseCta from "@/components/home/ConverseCta";
 import HomeLoader from "@/components/intro/HomeLoader";
-
+import FeaturedAwards from "@/components/home/FeaturedAwards";
 
 // generateMetadata jaisa tha waisa
 
@@ -32,9 +32,11 @@ export default async function Home() {
       <LaunchStack data={page.communitiesIntro} />
       <CommunitiesCollage data={page.communities} />
       <LaunchStack data={page.propertiesIntro} />
-      <ShowcaseMosaic data={page.showcase} />
+      {/* <ShowcaseMosaic data={page.showcase} /> */}
+      <CommunitiesCollage data={page.communities} />
       <LegacyStats data={page.legacy} />
       <PressRail data={page.press} />
+      <FeaturedAwards />
       <ConverseCta data={page.converse} />
     </ScrollStage>
    </>

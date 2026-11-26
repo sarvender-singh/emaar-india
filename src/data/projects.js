@@ -1,15 +1,42 @@
 // FILE: src/data/projects.js
-// Detail page ka URL. Agar aapka detail route alag hai to sirf yahan badlo.
+
 export const projectHref = (slug) => `/properties/${slug}`;
 
-// Local images: public/images/projects/<slug>.webp
-// Image ka naam project ke slug jaisa hi rakho (jaise elara.webp). Extension badalna ho to sirf IMG_EXT badlo.
 const IMG_DIR = "/images/projects/";
-const IMG_EXT = "webp";
 
-// p(category, status, slug, name, tagline, type, soldOut, image)
-// image na do to apne aap /images/projects/<slug>.webp use hota hai. Bina image ke chahiye to "" do.
-const p = (category, status, slug, name, tagline = "", type = "", soldOut = false, image = `${slug}.${IMG_EXT}`) => ({
+// Files ka folder: public/images/projects/
+// Left side: project slug. Right side: folder mein exact filename.
+const PROJECT_IMAGES = {
+  elara: "elara.jpg",
+  "emaar-serenity-hills": "Serenity-hills.webp",
+  "casa-venero": "Casa-Venero.webp",
+  "urban-oasis-phase-4": "urban-oasis.webp",
+  "urban-oasis": "urban-oasis.webp",
+  "the-88": "The-88.webp",
+  amaris: "Amaris.webp",
+  "urban-ascent": "Urban-Ascent.webp",
+  "elite-oasis": "elite-oasis.webp",
+  "emaar-digihomes": "Digihomes.webp",
+  "india-business-centre": "Business-centre.webp",
+  "emaar-continental-city-2": "emaar-continental-city-phase-ii.jpg",
+  "emaar-continental-city": "emaar-continental-city-phase-i.jpg",
+  "savana": "Savana-Jaipur-Greens.jpg",
+"gomti-greens-plots":"GomtiGreensBanner-706x385.jpg"
+};
+
+// Project ki image PROJECT_IMAGES se aati hai.
+// Mapping absent ho to default filename <slug>.webp hai.
+// Kisi entry mein 8th argument doge to woh filename priority lega.
+const p = (
+  category,
+  status,
+  slug,
+  name,
+  tagline = "",
+  type = "",
+  soldOut = false,
+  image = PROJECT_IMAGES[slug] ?? `${slug}.webp`
+) => ({
   category,
   status,
   slug,
@@ -17,7 +44,7 @@ const p = (category, status, slug, name, tagline = "", type = "", soldOut = fals
   tagline,
   type,
   soldOut,
-  image: image ? IMG_DIR + image : "",
+  image: image ? `${IMG_DIR}${image}` : "",
 });
 
 export const CATEGORIES = ["residential", "commercial"];
@@ -45,7 +72,7 @@ export const GROUPS = {
 export const projects = [
   // Residential / Ongoing
   p("residential", "ongoing", "elara", "Elara", "", "3 BHK Luxury Residences"),
-  p("residential", "ongoing", "emaar-serenity-hills", "Emaar Serenity Hills"),
+  p("residential", "ongoing", "emaar-serenity-hills", "Serenity Hills"),
   p("residential", "ongoing", "casa-venero", "Casa Venero", "Your haven of pure leisure.", "Luxury Villas"),
   p("residential", "ongoing", "urban-oasis-phase-4", "Urban Oasis – Phase-4", "Your tranquil modern life starts here.", "2 BHK Apartments"),
   p("residential", "ongoing", "urban-oasis", "Urban Oasis", "Reside in prominence. Revel in nature.", "3 and 4 BHK Luxury Apartments", true),

@@ -85,25 +85,26 @@ export const about = {
           { name: "Dubai", domain: "emaar.com", href: "https://www.emaar.com" },
           { name: "Saudi Arabia", domain: "sa.emaar.com", href: "https://sa.emaar.com/en/" },
           { name: "India", domain: "in.emaar.com", href: "https://in.emaar.com/" },
-          { name: "Pakistan", domain: "pk.emaar.com", href: "https://pk.emaar.com" },
+          
           { name: "Egypt", domain: "emaarmisr.com", href: "https://www.emaarmisr.com" },
           { name: "Morocco", domain: "ma.emaar.com", href: "https://ma.emaar.com/en/" },
           { name: "Turkey", domain: "tr.emaar.com", href: "https://tr.emaar.com/" },
           { name: "Lebanon", domain: "beitmisk.com", href: "https://www.beitmisk.com/" },
+          { name: "Pakistan", domain: "pk.emaar.com", href: "https://pk.emaar.com" },
         ],
       },
-      {
-        id: "leadership",
-        type: "leadership",
-        n: "04",
-        nav: "Leadership",
-        label: "04. Leadership",
-        title: "WHO WE ARE",
-        items: [
-          { tag: "BOARD OF DIRECTORS", title: "Emaar Properties Board of Directors", href: "/about-emaar/board-of-directors" },
-          { tag: "PRINCIPAL OFFICERS", title: "Emaar Properties Principal Officers", href: "/about-emaar/principal-officers" }
-        ],
-      },
+      // {
+      //   id: "leadership",
+      //   type: "leadership",
+      //   n: "04",
+      //   nav: "Leadership",
+      //   label: "04. Leadership",
+      //   title: "WHO WE ARE",
+      //   items: [
+      //     { tag: "BOARD OF DIRECTORS", title: "Emaar Properties Board of Directors", href: "/about-emaar/board-of-directors" },
+      //     { tag: "PRINCIPAL OFFICERS", title: "Emaar Properties Principal Officers", href: "/about-emaar/principal-officers" }
+      //   ],
+      // },
       {
   id: "awards",
   type: "awards",

@@ -1,24 +1,37 @@
 import Link from "next/link";
+
 import StageSection from "@/components/StageSection";
+import { EnquiryButton } from "@/components/EnquiryModal";
 import { WhatsappIcon } from "@/components/ui/icons";
 
+const buttonClass =
+  "inline-flex min-h-12 w-full items-center justify-center gap-2.5 border border-white/80 bg-transparent px-6 py-3 font-nav text-[11.5px] font-semibold uppercase leading-none tracking-[0.18em] text-white transition-colors duration-300 hover:bg-white hover:text-black focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:w-auto sm:min-w-[164px]";
+
 export default function ConverseCta({ data }) {
-  const { id = "converse", title, lede, video, cta } = data;
+  const {
+    id = "converse",
+    title,
+    lede,
+    video,
+    cta,
+    speakLabel = "Speak with us",
+  } = data;
 
   return (
     <StageSection
       id={id}
       aria-labelledby="converse-title"
       data-testid="converse"
-      className="h-svh"
+      className="flex min-h-svh items-center justify-center bg-black"
     >
-      {/* Background video: enter ke saath halka zoom-out */}
+      {/* Existing background video */}
       <div
         className="absolute inset-0 will-change-transform"
-        style={{ transform: "scale(calc(1.12 - var(--enter, 1) * 0.12))" }}
+        style={{
+          transform: "scale(calc(1.12 - var(--enter, 1) * 0.12))",
+        }}
       >
         <video
-          className="size-full object-cover"
           src={video.src}
           poster={video.poster}
           aria-label={video.label}
@@ -27,38 +40,51 @@ export default function ConverseCta({ data }) {
           loop
           playsInline
           preload="metadata"
+          className="block size-full object-cover"
         />
       </div>
 
-      {/* Wash: text readable rakhne ke liye */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/45 via-black/35 to-black/60" />
-
-      {/* Content */}
       <div
-        className="absolute inset-0 grid place-items-center px-6 text-center will-change-transform"
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/50 via-black/45 to-black/60"
+      />
+
+      {/* Heading, description and both CTAs */}
+      <div
+        className="relative z-10 mx-auto w-full max-w-[760px] px-6 py-24 text-center text-white sm:px-8"
         style={{
           transform: "translate3d(0, calc((1 - var(--enter, 1)) * 60px), 0)",
           opacity: "min(1, calc((var(--enter, 1) - 0.1) * 2))",
         }}
       >
-        <div className="max-w-[640px]">
-          <h2
-            id="converse-title"
-            className="m-0 font-serif text-[34px] font-light leading-[1.1] sm:text-[48px] lg:text-[54px]"
+        <h2
+          id="converse-title"
+          className="mx-auto my-0 max-w-[18ch] text-balance font-serif text-[36px] font-normal leading-[1.08] sm:text-[48px] lg:text-[54px]"
+        >
+          {title}
+        </h2>
+
+        <p className="mx-auto mb-0 mt-6 max-w-[620px] text-pretty font-sans text-[15px] font-normal leading-[1.7] text-white/95 sm:text-[17px] lg:mt-7">
+          {lede}
+        </p>
+
+        <div className="mx-auto mt-8 flex w-full max-w-[240px] flex-col items-center justify-center gap-3 sm:max-w-none sm:flex-row lg:mt-9">
+          <EnquiryButton
+            source="home-converse"
+            data-testid="converse-speak-cta"
+            className={buttonClass}
           >
-            {title}
-          </h2>
-          <p className="mx-auto mb-0 mt-7 max-w-[560px] text-[14px] leading-[1.8] text-white/85 sm:text-[15px]">
-            {lede}
-          </p>
+            {speakLabel}
+          </EnquiryButton>
 
           <Link
             href={cta.href}
+            target={cta.external ? "_blank" : undefined}
+            rel={cta.external ? "noopener noreferrer" : undefined}
             data-testid="converse-cta"
-            {...(cta.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-            className="mt-10 inline-flex h-12 items-center gap-3 border border-white/60 px-7 font-nav text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors duration-300 hover:bg-white hover:text-black"
+            className={buttonClass}
           >
-            {cta.icon === "whatsapp" && <WhatsappIcon size={14} />}
+            {cta.icon === "whatsapp" && <WhatsappIcon size={15} />}
             {cta.label}
           </Link>
         </div>

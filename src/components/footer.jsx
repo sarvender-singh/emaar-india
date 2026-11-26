@@ -1,158 +1,224 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import FooterPreferences from "@/components/privacy/FooterPreferences";
 import { usePathname } from "next/navigation";
+
 import { EnquiryButton } from "@/components/EnquiryModal";
+import FooterPageDetails from "@/components/FooterPageDetails";
+import FooterPreferences from "@/components/privacy/FooterPreferences";
 import { SocialIcon, WhatsappIcon } from "@/components/ui/icons";
 
-const BTN =
-  "inline-flex items-center justify-center gap-[11px] px-[34px] py-[17px] font-nav text-[11px] font-semibold uppercase tracking-[0.17em] whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
+const BUTTON_CLASS =
+  "inline-flex min-h-12 items-center justify-center gap-3 whitespace-nowrap " +
+  "border px-8 py-4 font-nav text-[11.5px] font-semibold uppercase " +
+  "leading-none tracking-[0.17em] transition-colors " +
+  "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white";
 
-const LIST_LINK =
-  "inline-block text-start text-[14px] leading-[1.4] text-white/85 transition-[color,transform] duration-300 hover:translate-x-[5px] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
+const LINK_CLASS =
+  "inline-block text-start font-sans text-[16px] font-normal leading-[1.5] " +
+  "text-[#bcb9b4] transition-[color,transform] duration-300 " +
+  "hover:translate-x-[5px] hover:text-white " +
+  "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white";
+
+const COLUMN_CLASS =
+  "min-w-0 px-[clamp(24px,4vw,64px)] py-[clamp(42px,5vw,80px)]";
 
 export default function Footer({ data }) {
-  const { logo, tagline, actions, columns, social, bottom } = data;
   const pathname = usePathname();
-  const ref = useRef(null);
+  const footerRef = useRef(null);
+  const isHome = pathname === "/";
 
-  // Desktop detect (>= 1024px). Initial false rakha hai taaki SSR/hydration match rahe.
-  const [desktop, setDesktop] = useState(false);
+  const {
+    logo,
+    tagline,
+    actions = [],
+    columns = [],
+    social = [],
+    bottom,
+  } = data;
+
+  const exploreHref =
+    bottom.exploreAll.href === "/sitemap"
+      ? "/html-sitemap"
+      : bottom.exploreAll.href;
+
   useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px)");
-    const onChange = () => setDesktop(mq.matches);
-    onChange();
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
+    const footer = footerRef.current;
+    if (!isHome || !footer) return;
 
-  // Curtain reveal sirf home page + desktop par
-  const reveal = pathname === "/" && desktop;
+    function measureFooter() {
+      // Short footer sits at the viewport bottom. A tall footer first
+      // reveals its top, then scrolls naturally with the document.
+      const inset = Math.min(0, window.innerHeight - footer.offsetHeight);
+      footer.style.setProperty("--footer-reveal-bottom", `${inset}px`);
+    }
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || !reveal) return;
-    const root = document.documentElement;
-    let raf = 0;
-    let h = 0;
+    measureFooter();
 
-    const update = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const left = root.scrollHeight - window.innerHeight - window.scrollY;
-        const p = h > 0 ? Math.min(1, Math.max(0, 1 - left / h)) : 1;
-        el.style.setProperty("--ft-p", p.toFixed(4));
-      });
-    };
+    const observer = new ResizeObserver(measureFooter);
+    observer.observe(footer);
+    window.addEventListener("resize", measureFooter);
 
-    const measure = () => {
-      h = el.offsetHeight;
-      root.style.setProperty("--footer-h", `${h}px`);
-      update();
-    };
-
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    window.addEventListener("resize", measure);
-    window.addEventListener("scroll", update, { passive: true });
     return () => {
-      cancelAnimationFrame(raf);
-      ro.disconnect();
-      window.removeEventListener("resize", measure);
-      window.removeEventListener("scroll", update);
-      root.style.removeProperty("--footer-h");
+      observer.disconnect();
+      window.removeEventListener("resize", measureFooter);
+      footer.style.removeProperty("--footer-reveal-bottom");
     };
-  }, [reveal]);
+  }, [isHome]);
+
+  function handleDetailsToggle(event) {
+    const wrapper = event.currentTarget;
+    const details = event.target;
+
+    // Only the centre arrow opens the outer disclosure.
+    // FAQ questions inside it can be expanded independently.
+    if (
+      !(details instanceof HTMLDetailsElement) ||
+      details !== wrapper.querySelector("details") ||
+      !details.open
+    ) {
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      const footer = footerRef.current;
+      if (!footer || !details.isConnected || !details.open) return;
+
+      // Apply the expanded height before measuring the visible content.
+      if (isHome) {
+        const inset = Math.min(0, window.innerHeight - footer.offsetHeight);
+        footer.style.setProperty("--footer-reveal-bottom", `${inset}px`);
+      }
+
+      const summary = details.querySelector(":scope > summary");
+      if (!summary) return;
+
+      const summaryBottom = summary.getBoundingClientRect().bottom;
+      const contentHeight = details.getBoundingClientRect().bottom - summaryBottom;
+      const visibleBelow = Math.max(0, window.innerHeight - summaryBottom);
+      const previewHeight = Math.min(160, contentHeight);
+      const distance = Math.max(0, previewHeight - visibleBelow);
+
+      if (distance < 1) return;
+
+      window.scrollBy({
+        top: distance,
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "instant"
+          : "smooth",
+      });
+    });
+  }
 
   return (
     <footer
-  ref={ref}
-  data-testid="site-footer"
-  className={`hidden bg-[#100f0d] font-nav text-white lg:block ${
-    reveal
-      ? "fixed inset-x-0 bottom-0 z-0 will-change-transform"
-      : "relative z-20"
-  }`}
-  style={reveal ? { transform: "translate3d(0, calc((1 - var(--ft-p, 0)) * 56px), 0)" } : undefined}
->
-      {/* TOP: logo + tagline + actions */}
-      <div className="flex flex-wrap items-end justify-between gap-[clamp(28px,5vw,80px)] border-b border-white/10 px-[clamp(22px,5vw,88px)] pb-[clamp(32px,5vh,80px)] pt-[clamp(40px,7vh,110px)]">
-        <div className="min-w-[min(300px,100%)] flex-1 basis-[390px]">
-          <Link href="/" aria-label={logo.alt}>
+      ref={footerRef}
+      data-testid="site-footer"
+      className={[
+        "hidden w-full bg-[#100f0d] text-white lg:block",
+        isHome
+          ? "relative z-0 lg:motion-safe:sticky lg:motion-safe:bottom-[var(--footer-reveal-bottom,0px)]"
+          : "relative z-20",
+      ].join(" ")}
+    >
+      {/* Logo and contact actions */}
+      <div className="flex flex-wrap items-end justify-between gap-8 border-b border-white/10 px-[5vw] pb-[clamp(32px,4vw,60px)] pt-[clamp(48px,5vw,80px)]">
+        <div className="min-w-0">
+          <Link href="/" aria-label={logo.alt} className="inline-block">
             <Image
               src={logo.src}
               alt={logo.alt}
-              width={140}
-              height={48}
-              className="h-[clamp(28px,3.6vw,52px)] w-auto brightness-0 invert"
+              width={240}
+              height={82}
+              className="h-[clamp(42px,4.2vw,72px)] w-auto brightness-0 invert"
             />
           </Link>
+
           {tagline && (
-            <p className="mb-0 mt-[clamp(24px,3vw,40px)] max-w-[20em] font-serif text-[clamp(24px,2.6vw,38px)] leading-[1.08] text-white">
+            <p className="mb-0 mt-7 max-w-[20em] font-serif text-[clamp(28px,2.6vw,44px)] font-normal leading-[1.1]">
               {tagline}
             </p>
           )}
         </div>
 
-        <div data-testid="site-footer-actions" className="hidden flex-wrap gap-3.5 sm:flex">
-          {actions.map((a) => {
-            const cls = `${BTN} ${
-              a.variant === "solid"
-                ? "border border-[#f1ede4] bg-[#f1ede4] text-[#100f0d] transition-opacity hover:opacity-85"
-                : "border border-white/35 bg-transparent text-white transition-colors hover:bg-white/10"
-            }`;
-            return a.action === "enquire" ? (
-              <EnquiryButton key={a.label} source="footer" data-testid="site-footer-action" className={cls}>
-                {a.label}
-              </EnquiryButton>
-            ) : (
+        <div
+          data-testid="site-footer-actions"
+          className="flex flex-wrap items-center gap-4"
+        >
+          {actions.map((action) => {
+            const variantClass =
+              action.variant === "solid"
+                ? "border-[#f1ede4] bg-[#f1ede4] text-[#100f0d] hover:bg-white"
+                : "border-white/40 bg-transparent text-white hover:border-white hover:bg-white/10";
+
+            const className = `${BUTTON_CLASS} ${variantClass}`;
+
+            if (action.action === "enquire") {
+              return (
+                <EnquiryButton
+                  key={action.label}
+                  source="footer"
+                  data-testid="site-footer-action"
+                  className={className}
+                >
+                  {action.label}
+                </EnquiryButton>
+              );
+            }
+
+            return (
               <a
-                key={a.label}
-                href={a.href}
+                key={action.label}
+                href={action.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 data-testid="site-footer-action"
-                className={cls}
+                className={className}
               >
-                {a.icon === "whatsapp" && <WhatsappIcon size={14} />}
-                <span>{a.label}</span>
+                {action.icon === "whatsapp" && <WhatsappIcon size={14} />}
+                <span>{action.label}</span>
               </a>
             );
           })}
         </div>
       </div>
 
-      {/* COLUMNS (desktop; mobile par ye More sheet me hain) */}
-      <div data-testid="site-footer-columns" className="hidden flex-wrap border-b border-white/10 lg:flex">
-        {columns.map((col) => (
+      {/* Navigation and social links */}
+      <div
+        data-testid="site-footer-columns"
+        className="grid grid-cols-4 border-b border-white/10"
+      >
+        {columns.map((column) => (
           <nav
-            key={col.title}
-            aria-label={col.title}
+            key={column.title}
+            aria-label={column.title}
             data-testid="site-footer-column"
-            className="min-w-[150px] shrink grow basis-[230px] border-e border-white/[0.12] px-[clamp(20px,4vw,60px)] py-[clamp(26px,5.2vw,72px)]"
+            className={`${COLUMN_CLASS} border-e border-white/10`}
           >
-            <p className="m-0 mb-4 text-[10px] font-semibold uppercase tracking-[0.26em] text-white/50">{col.title}</p>
-            <ul className="m-0 flex list-none flex-col items-start gap-[11px] p-0">
-              {col.links
-                .filter((l) => !l.mobileOnly)
-                .map((l) => (
-                  <li key={l.label}>
-                    {l.action === "enquire" ? (
-                      <EnquiryButton source="footer-link" className={LIST_LINK}>
-                        {l.label}
+            <p className="m-0 mb-5 font-nav text-[11px] font-semibold uppercase leading-[1.4] tracking-[0.22em] text-white/60">
+              {column.title}
+            </p>
+
+            <ul className="m-0 flex list-none flex-col items-start gap-3 p-0">
+              {column.links
+                .filter((link) => !link.mobileOnly)
+                .map((link) => (
+                  <li key={link.label}>
+                    {link.action === "enquire" ? (
+                      <EnquiryButton source="footer-link" className={LINK_CLASS}>
+                        {link.label}
                       </EnquiryButton>
                     ) : (
                       <Link
-                        href={l.href}
+                        href={link.href}
                         data-testid="site-footer-link"
-                        className={LIST_LINK}
-                        {...(l.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                        className={LINK_CLASS}
+                        target={link.external ? "_blank" : undefined}
+                        rel={link.external ? "noopener noreferrer" : undefined}
                       >
-                        {l.label}
+                        {link.label}
                       </Link>
                     )}
                   </li>
@@ -161,18 +227,22 @@ export default function Footer({ data }) {
           </nav>
         ))}
 
-        <div className="min-w-[240px] shrink grow basis-[300px] px-[clamp(20px,4vw,60px)] py-[clamp(26px,5.2vw,72px)]">
-          <ul data-testid="site-footer-social" className="m-0 flex list-none flex-wrap items-center gap-3.5 p-0" aria-label="Social">
-            {social.map((s) => (
-              <li key={s.name}>
+        <div className={COLUMN_CLASS}>
+          <ul
+            aria-label="Social"
+            data-testid="site-footer-social"
+            className="m-0 flex list-none flex-wrap items-center gap-3 p-0"
+          >
+            {social.map((item) => (
+              <li key={item.name}>
                 <a
-                  href={s.href}
+                  href={item.href}
                   target="_blank"
                   rel="noopener noreferrer nofollow"
-                  aria-label={s.label}
-                  className="grid size-11 place-items-center rounded-full border border-white/20 bg-white/[0.03] transition duration-300 hover:-translate-y-[3px] hover:scale-105 hover:bg-white hover:text-black"
+                  aria-label={item.label}
+                  className="grid size-11 place-items-center rounded-full border border-white/20 bg-white/[0.03] text-white/80 transition-colors hover:border-white hover:bg-white hover:text-black focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
                 >
-                  <SocialIcon name={s.name} />
+                  <SocialIcon name={item.name} />
                 </a>
               </li>
             ))}
@@ -180,34 +250,46 @@ export default function Footer({ data }) {
         </div>
       </div>
 
-      {/* BOTTOM */}
-      <div className="flex flex-wrap items-center gap-x-[30px] gap-y-4 px-[clamp(22px,5vw,88px)] py-[clamp(22px,3.4vw,44px)]">
+      {/* Copyright, sitemap and legal links */}
+      <div className="flex flex-wrap items-center gap-x-7 gap-y-4 px-[5vw] py-[clamp(28px,3.5vw,54px)]">
         <Link
-          href={bottom.exploreAll.href === "/sitemap" ? "/html-sitemap" : bottom.exploreAll.href}
+          href={exploreHref}
           data-testid="site-footer-explore-all"
-          className="hidden items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] hover:text-white/80 lg:inline-flex"
+          className="inline-flex items-center gap-3 font-nav text-[11.5px] font-semibold uppercase tracking-[0.17em] text-white/90 transition-colors hover:text-white"
         >
           {bottom.exploreAll.label}
           <span aria-hidden="true">→</span>
         </Link>
 
-        <p data-testid="site-footer-copyright" className="m-0 text-xs text-white/45 lg:ms-auto">
+        <p
+          data-testid="site-footer-copyright"
+          className="m-0 ms-auto font-sans text-[13px] leading-[1.5] text-white/55"
+        >
           {bottom.copyright}
         </p>
 
-        <div data-testid="site-footer-legal" className="flex flex-wrap items-center gap-x-[22px] gap-y-3 text-xs">
-          {bottom.legal.map((l) => (
+        <div
+          data-testid="site-footer-legal"
+          className="flex flex-wrap items-center gap-x-5 gap-y-3 font-sans text-[13px] leading-[1.5]"
+        >
+          {bottom.legal.map((link) => (
             <Link
-              key={l.label}
-              href={l.href}
+              key={link.label}
+              href={link.href}
               data-testid="site-footer-legal-link"
-              className="text-white/55 transition-colors hover:text-white"
+              className="text-white/60 transition-colors hover:text-white"
             >
-              {l.label}
+              {link.label}
             </Link>
           ))}
-            <FooterPreferences />
+
+          <FooterPreferences />
         </div>
+      </div>
+
+      {/* Page-specific keywords and home FAQ */}
+      <div key={pathname} onToggleCapture={handleDetailsToggle}>
+        <FooterPageDetails data={data} footer={data} pathname={pathname} />
       </div>
     </footer>
   );
